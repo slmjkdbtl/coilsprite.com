@@ -5,10 +5,7 @@ const styles = {
 		"margin": "0",
 		"padding": "0",
 		"box-sizing": "border-box",
-		"cursor": "url(/static/img/wand.png) 24 24, default",
-	},
-	"button": {
-		"cursor": "url(/static/img/wand.png) 24 24, pointer",
+		"cursor": "url(/static/img/wand.png) 32 32, default",
 	},
 	"html": {
 		"width": "100%",
@@ -18,11 +15,12 @@ const styles = {
 		"cursor": "url(/static/img/wand.png)",
 		"width": "100%",
 		"height": "100%",
+		"background": "url(/static/img/sky.jpg)",
 		// "background": "url(/static/img/shroomkingdom.jpg) no-repeat",
 		// "background-size": "cover",
 		// "background": "linear-gradient(#cc00ff, #ffffff)",
 		// "background": "linear-gradient(#9511ba, #000000)",
-		"background": "#000000",
+		// "background": "#000000",
 	},
 	"img": {
 		// "image-rendering": "pixelated",
@@ -47,6 +45,49 @@ const styles = {
 	".bling": {
 		"position": "absolute",
 		"z-index": "1000",
+	},
+	"#title": {
+		"position": "absolute",
+		"left": "50%",
+		"top": "40px",
+		"transform": "translateX(-50%)",
+		"width": "320px",
+	},
+	"#cd": {
+		"position": "absolute",
+		"left": "0px",
+		"top": "220px",
+		"transition": "0.2s",
+		"width": "320px",
+		":hover": {
+			"transform": "scale(1.05)",
+		},
+	},
+	"#shirt": {
+		"position": "absolute",
+		"left": "60px",
+		"top": "540px",
+		"transition": "0.2s",
+		"width": "320px",
+		":hover": {
+			"transform": "scale(1.05)",
+		},
+	},
+	"#shroooms": {
+		"position": "absolute",
+		"right": "0",
+		"top": "240px",
+		"transition": "0.2s",
+		"width": "420px",
+		":hover": {
+			"transform": "scale(1.05)",
+		},
+	},
+	"main": {
+		"position": "relative",
+		"margin": "0 auto",
+		"width": "720px",
+		"background": "red",
 	},
 	"#mousetest": {
 		"background": "white",
@@ -87,7 +128,12 @@ const handler: Handler = async ({ res }) => {
 			h("style", {}, css(styles)),
 		]),
 		h("body", {}, [
-			h("button", {}, "ohhi"),
+			h("main", {}, [
+				h("img", { id: "title", src: "/static/img/title.png" }),
+				h("img", { id: "cd", onclick: "alert(\"TODO: show music\")", src: "/static/img/cd.png" }),
+				h("img", { id: "shirt", onclick: "alert(\"TODO: show xxx\")", src: "/static/img/shirt.png" }),
+				h("img", { id: "shroooms", onclick: "alert(\"TODO: show bio\")", src: "/static/img/shroooms.png" }),
+			]),
 			// h("div", { id: "mousetest" }, []),
 			// h("div", { id: "ch" }, [
 				// h("img", { id: "midori", src: "/static/img/midori.png" }),

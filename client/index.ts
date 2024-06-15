@@ -40,7 +40,7 @@ function wait(t: number) {
 
 async function spawnTrail(x: number, y: number) {
 	const bling = document.createElement("img")
-	const s = rand(0.1, 0.6)
+	const s = rand(0.1, 0.5)
 	const r = 0
 	bling.src = "/static/img/bling.png"
 	bling.classList.add("bling")
