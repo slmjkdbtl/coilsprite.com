@@ -28,7 +28,7 @@ function onMouseMove(e: MouseEvent) {
 	if (trailMeter >= trailFreq) {
 		trailMeter -= trailFreq
 		trailFreq = randi(TRAIL_FREQ[0], TRAIL_FREQ[1])
-		spawnTrail(e.clientX + rand(-TRAIL_RANGE, TRAIL_RANGE), e.clientY + rand(-TRAIL_RANGE, TRAIL_RANGE))
+		spawnTrail(e.pageX + rand(-TRAIL_RANGE, TRAIL_RANGE), e.pageY + rand(-TRAIL_RANGE, TRAIL_RANGE))
 	}
 }
 

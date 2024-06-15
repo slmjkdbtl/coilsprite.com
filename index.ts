@@ -51,7 +51,7 @@ const styles = {
 		"left": "50%",
 		"top": "40px",
 		"transform": "translateX(-50%)",
-		"width": "320px",
+		"width": "360px",
 	},
 	"#cd": {
 		"position": "absolute",
@@ -66,7 +66,7 @@ const styles = {
 	"#shirt": {
 		"position": "absolute",
 		"left": "60px",
-		"top": "540px",
+		"top": "560px",
 		"transition": "0.2s",
 		"width": "320px",
 		":hover": {
