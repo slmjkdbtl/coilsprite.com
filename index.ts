@@ -1,50 +1,18 @@
-import { h, css, csslib, js, Handler } from "./www"
+import { h, css, js, Handler } from "./www"
+import { head } from "./shared"
 
 const styles = {
-	"*": {
-		"margin": "0",
-		"padding": "0",
-		"box-sizing": "border-box",
-		"cursor": "url(/static/img/wand.png) 32 32, default",
-	},
-	"html": {
+	"main": {
 		"width": "100%",
-		"height": "100%",
+		"height": "1600px",
+		"min-height": "100vh",
+		"overflow": "hidden",
+		"position": "relative",
 	},
-	"body": {
-		"cursor": "url(/static/img/wand.png)",
-		"width": "100%",
-		"height": "100%",
-		"background": "url(/static/img/sky.jpg)",
-		// "background": "url(/static/img/shroomkingdom.jpg) no-repeat",
-		// "background-size": "cover",
-		// "background": "linear-gradient(#cc00ff, #ffffff)",
-		// "background": "linear-gradient(#9511ba, #000000)",
-		// "background": "#000000",
-	},
-	"img": {
-		// "image-rendering": "pixelated",
-	},
-	"#ch": {
-		"position": "absolute",
-		"left": "540px",
-		"top": "220px",
-	},
-	"#midori": {
-		"position": "absolute",
-		"left": "20px",
-		"bottom": "20px",
-	},
-	"#talk": {
-		"position": "absolute",
-		"left": "120px",
-		"bottom": "120px",
-		"animation": "talk 1s infinite",
-		"transform-origin": "bottom left",
-	},
-	".bling": {
-		"position": "absolute",
-		"z-index": "1000",
+	"#content": {
+		"position": "relative",
+		"margin": "0 auto",
+		"width": "720px",
 	},
 	"#title": {
 		"position": "absolute",
@@ -58,7 +26,7 @@ const styles = {
 		"left": "0px",
 		"top": "220px",
 		"transition": "0.2s",
-		"width": "320px",
+		"width": "400px",
 		":hover": {
 			"transform": "scale(1.05)",
 		},
@@ -78,68 +46,65 @@ const styles = {
 		"right": "0",
 		"top": "240px",
 		"transition": "0.2s",
-		"width": "420px",
+		"width": "400px",
 		":hover": {
 			"transform": "scale(1.05)",
 		},
 	},
-	"main": {
-		"position": "relative",
-		"margin": "0 auto",
-		"width": "720px",
-		"background": "red",
-	},
-	"#mousetest": {
-		"background": "white",
-		"width": "300px",
-		"height": "200px",
+	"#phone": {
 		"position": "absolute",
-		"top": "100px",
-		"left": "200px",
-		"z-index": "1000",
+		"right": "160px",
+		"top": "680px",
+		"transition": "0.2s",
+		"width": "200px",
 		":hover": {
-			"background": "blue",
+			"transform": "scale(1.1)",
 		},
 	},
-	"@keyframes": {
-		"talk": {
-			"0%": {
-				"transform": "scale(1.0)",
-			},
-			"50%": {
-				"transform": "scale(1.05) rotate(1deg)",
-			},
-			"100%": {
-				"transform": "scale(1.0)",
-			},
-		},
+	"#rest": {
+		"position": "absolute",
+		"width": "480px",
+		"right": "120px",
+		"bottom": "0",
+	},
+	"#ground": {
+		"position": "absolute",
+		"min-width": "calc(100vw + 20%)",
+		"left": "50%",
+		"transform": "translate(-50%, 0)",
+		"bottom": "-10%",
 	},
 }
 
 const handler: Handler = async ({ res }) => {
 	return res.sendHTML("<!DOCTYPE html>" + h("html", { lang: "en" }, [
 		h("head", {}, [
+			...await head(),
 			h("title", {}, "coilsprite"),
-			h("meta", { charset: "utf-8", }),
 			h("meta", { name: "description", content: "midori's homepage", }),
-			h("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
-			h("link", { rel: "icon", href: "/static/img/midori@10x.png" }),
-			h("style", {}, csslib()),
 			h("style", {}, css(styles)),
 		]),
 		h("body", {}, [
 			h("main", {}, [
-				h("img", { id: "title", src: "/static/img/title.png" }),
-				h("img", { id: "cd", onclick: "alert(\"TODO: show music\")", src: "/static/img/cd.png" }),
-				h("img", { id: "shirt", onclick: "alert(\"TODO: show xxx\")", src: "/static/img/shirt.png" }),
-				h("img", { id: "shroooms", onclick: "alert(\"TODO: show bio\")", src: "/static/img/shroooms.png" }),
+				h("div", { id: "content" }, [
+					h("img", { id: "title", src: "/static/img/title.png" }),
+					h("a", { href: "/music", }, [
+						h("img", { id: "cd", src: "/static/img/cd.png" }),
+					]),
+					h("a", { href: "/shop", }, [
+						h("img", { id: "shirt", src: "/static/img/shirt.png" }),
+					]),
+					h("a", { href: "/artworks", }, [
+						h("img", { id: "shroooms", src: "/static/img/shroooms.png" }),
+					]),
+					h("a", { href: "/contact", }, [
+						h("img", { id: "phone", src: "/static/img/phone.png" }),
+					]),
+				]),
+				h("img", { id: "ground", src: "/static/img/ground.png" }),
+				h("img", { id: "rest", src: "/static/img/rest.png" }),
 			]),
 			// h("div", { id: "mousetest" }, []),
-			// h("div", { id: "ch" }, [
-				// h("img", { id: "midori", src: "/static/img/midori.png" }),
-				// h("img", { id: "talk", src: "/static/img/talk.png" }),
-			// ]),
-			h("script", {}, await js("client/index.ts")),
 		]),
 	]))
 }

@@ -1404,7 +1404,7 @@ export function h(
 		}
 	}
 
-	html += ">"
+	html += ">\n"
 
 	if (typeof(children) === "string" || typeof(children) === "number") {
 		html += children
@@ -1420,7 +1420,7 @@ export function h(
 	}
 
 	if (children !== undefined && children !== null) {
-		html += `</${tag}>`
+		html += `</${tag}>\n`
 	}
 
 	return html
@@ -1453,17 +1453,26 @@ export type CSS = {
 	"@font-face"?: StyleSheet[],
 }
 
+export function mergeDefaults<K>(obj: Partial<K>, defaults: K) {
+	const obj2 = { ...defaults }
+	for (const k in obj) {
+		// @ts-ignore
+		obj2[k] = obj[k]
+	}
+	return obj2
+}
+
 export type CSSOpts = {
-	readable?: boolean,
+	minify?: boolean,
 }
 
 // sass-like css preprocessor
 export function css(list: CSS, opts: CSSOpts = {}) {
 
-	const nl = opts.readable ? "\n" : ""
-	const sp = opts.readable ? " " : ""
+	const nl = opts.minify ? "" : "\n"
+	const sp = opts.minify ? "" : " "
 	let lv = 0
-	const id = () => opts.readable ? " ".repeat(lv * 2) : ""
+	const id = () => opts.minify ? "" : " ".repeat(lv * 2)
 
 	function handleSheet(sheet: StyleSheet) {
 		let code = "{" + nl
@@ -1567,6 +1576,7 @@ export function csslib(opt: CSSLibOpts = {}) {
 
 	// tailwind-like css helpers
 	const base: Record<string, Record<string, string | number>> = {
+		".flex": { "display": "flex" },
 		".vstack": { "display": "flex", "flex-direction": "column" },
 		".hstack": { "display": "flex", "flex-direction": "row" },
 		".vstack-reverse": { "display": "flex", "flex-direction": "column-reverse" },
@@ -1648,8 +1658,8 @@ export async function js(p: string) {
 	if (file.size === 0) return ""
 	const res = await Bun.build({
 		entrypoints: [p],
-		minify: !isDev,
-		sourcemap: isDev ? "inline" : "none",
+		minify: false,
+		sourcemap: "none",
 		target: "browser",
 	})
 	if (res.success) {
