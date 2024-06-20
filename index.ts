@@ -66,6 +66,14 @@ const styles = {
 		"width": "480px",
 		"right": "120px",
 		"bottom": "0",
+		"pointer-events": "none",
+	},
+	"#pandasheep": {
+		"position": "absolute",
+		"width": "240px",
+		"left": "120px",
+		"bottom": "20px",
+		"pointer-events": "none",
 	},
 	"#ground": {
 		"position": "absolute",
@@ -73,6 +81,7 @@ const styles = {
 		"left": "50%",
 		"transform": "translate(-50%, 0)",
 		"bottom": "-10%",
+		"pointer-events": "none",
 	},
 }
 
@@ -102,6 +111,7 @@ const handler: Handler = async ({ res }) => {
 					]),
 				]),
 				h("img", { id: "ground", src: "/static/img/ground.png" }),
+				h("img", { id: "pandasheep", src: "/static/img/pandasheep.png" }),
 				h("img", { id: "rest", src: "/static/img/rest.png" }),
 			]),
 			// h("div", { id: "mousetest" }, []),

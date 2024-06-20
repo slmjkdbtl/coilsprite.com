@@ -97,4 +97,3 @@ const handler: Handler = async ({ res }) => {
 }
 
 export default handler
-

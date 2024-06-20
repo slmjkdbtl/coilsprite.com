@@ -1652,8 +1652,13 @@ export function csslib(opt: CSSLibOpts = {}) {
 
 }
 
+const jsCache: Record<string, string> = {}
+
 // TODO: better error handling?
 export async function js(p: string) {
+	if (jsCache[p]) {
+		return Promise.resolve(jsCache[p])
+	}
 	const file = Bun.file(p)
 	if (file.size === 0) return ""
 	const res = await Bun.build({
@@ -1667,6 +1672,9 @@ export async function js(p: string) {
 			throw new Error(`Expected 1 output, found ${res.outputs.length}`)
 		}
 		const code = await res.outputs[0].text()
+		if (!isDev) {
+			jsCache[p] = code
+		}
 		return code
 	} else {
 		console.log(res.logs[0])
