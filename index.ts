@@ -12,7 +12,12 @@ const styles = {
 	"#content": {
 		"position": "relative",
 		"margin": "0 auto",
-		"width": "720px",
+		"width": "800px",
+		// "@media": {
+			// "screen and (max-width: 960px)": {
+				// "width": "100%",
+			// },
+		// },
 	},
 	"#title": {
 		"position": "absolute",
@@ -26,40 +31,106 @@ const styles = {
 		"left": "0px",
 		"top": "220px",
 		"transition": "0.2s",
-		"width": "400px",
 		":hover": {
 			"transform": "scale(1.05)",
+			".label": {
+				"transform": "scale(1.1)",
+			},
 		},
-	},
-	"#shirt": {
-		"position": "absolute",
-		"left": "60px",
-		"top": "560px",
-		"transition": "0.2s",
-		"width": "320px",
-		":hover": {
-			"transform": "scale(1.05)",
+		".label": {
+			"transition": "0.2s",
+			"position": "absolute",
+			"left": "190px",
+			"top": "190px",
 		},
+		// ".gfx": {
+			// "@media": {
+				// "screen and (max-width: 960px)": {
+					// "width": "100%",
+					// "max-width": "480px",
+				// },
+			// },
+		// },
+		// "@media": {
+			// "screen and (max-width: 960px)": {
+				// "position": "relative",
+				// "width": "100%",
+			// },
+		// },
 	},
 	"#shroooms": {
 		"position": "absolute",
 		"right": "0",
-		"top": "240px",
+		"top": "300px",
 		"transition": "0.2s",
-		"width": "400px",
 		":hover": {
 			"transform": "scale(1.05)",
+			".label": {
+				"transform": "scale(1.1)",
+			},
 		},
+		".label": {
+			"transition": "0.2s",
+			"position": "absolute",
+			"left": "100px",
+			"top": "320px",
+		},
+		// "@media": {
+			// "screen and (max-width: 960px)": {
+				// "position": "relative",
+				// "width": "100%",
+			// },
+		// },
+	},
+	"#shirt": {
+		"position": "absolute",
+		"left": "60px",
+		"top": "680px",
+		"transition": "0.2s",
+		"width": "320px",
+		":hover": {
+			"transform": "scale(1.05)",
+			".label": {
+				"transform": "scale(1.1)",
+			},
+		},
+		".label": {
+			"transition": "0.2s",
+			"position": "absolute",
+			"left": "160px",
+			"top": "180px",
+		},
+		// "@media": {
+			// "screen and (max-width: 960px)": {
+				// "position": "relative",
+				// "width": "100%",
+			// },
+		// },
 	},
 	"#phone": {
 		"position": "absolute",
 		"right": "160px",
-		"top": "680px",
+		"top": "880px",
 		"transition": "0.2s",
 		"width": "200px",
 		":hover": {
-			"transform": "scale(1.1)",
+			"transform": "scale(1.05)",
+			".label": {
+				"transform": "scale(1.1)",
+			},
 		},
+		".label": {
+			"transition": "0.2s",
+			"position": "absolute",
+			"left": "10px",
+			"top": "130px",
+		},
+		// "@media": {
+			// "screen and (max-width: 960px)": {
+				// "position": "relative",
+				// "width": "100%",
+			// },
+		// },
 	},
 	"#rest": {
 		"position": "absolute",
@@ -97,17 +168,23 @@ const handler: Handler = async ({ res }) => {
 			h("main", {}, [
 				h("div", { id: "content" }, [
 					h("img", { id: "title", src: "/static/img/title.png" }),
-					h("a", { href: "/music", }, [
-						h("img", { id: "cd", src: "/static/img/cd.png" }),
-					]),
-					h("a", { href: "/shop", }, [
-						h("img", { id: "shirt", src: "/static/img/shirt.png" }),
-					]),
-					h("a", { href: "/artworks", }, [
-						h("img", { id: "shroooms", src: "/static/img/shroooms.png" }),
-					]),
-					h("a", { href: "/contact", }, [
-						h("img", { id: "phone", src: "/static/img/phone.png" }),
+					h("div", { class: "stretch-x vstack align-center justify-center g32" }, [
+						h("a", { id: "cd", href: "/music", }, [
+							h("img", { class: "gfx", src: "/static/img/cd.png" }),
+							h("img", { class: "label", src: "/static/img/music.png" }),
+						]),
+						h("a", { id: "shroooms", href: "/artworks", }, [
+							h("img", { class: "gfx", src: "/static/img/shroooms.png" }),
+							h("img", { class: "label", src: "/static/img/artworks.png" }),
+						]),
+						h("a", { id: "shirt", href: "/shop", }, [
+							h("img", { class: "gfx", src: "/static/img/shirt.png" }),
+							h("img", { class: "label", src: "/static/img/shop.png" }),
+						]),
+						h("a", { id: "phone", href: "/contact", }, [
+							h("img", { class: "gfx", src: "/static/img/phone.png" }),
+							h("img", { class: "label", src: "/static/img/contact.png" }),
+						]),
 					]),
 				]),
 				h("img", { id: "ground", src: "/static/img/ground.png" }),
