@@ -12,7 +12,6 @@ const styles = {
 		},
 	},
 	"body": {
-		// "padding": "32px",
 		"font-family": "Monospace",
 		"font-size": "24px",
 	},
@@ -50,9 +49,9 @@ const handler: Handler = async ({ res }) => {
 			h("style", {}, css(styles)),
 		]),
 		h("body", {}, [
-			h("div", { class: "section p32 stretch-x vstack g16" }, [
+			h("div", { class: "section p-32 fill-x vstack g-16" }, [
 				h("p", {}, "Poster design / drawings"),
-				h("div", { class: "hstack g16 wrap" }, p["posters_drawings"].map((f) => {
+				h("div", { class: "hstack g-16 wrap" }, p["posters_drawings"].map((f) => {
 					return h("div", { class: "thumb flex center" }, [
 						h("img", {
 							class: "present center",
@@ -62,9 +61,9 @@ const handler: Handler = async ({ res }) => {
 					])
 				})),
 			]),
-			h("div", { class: "section p32 stretch-x vstack g16" }, [
+			h("div", { class: "section p-32 fill-x vstack g16" }, [
 				h("p", {}, "CD Design for East of Mozart"),
-				h("div", { class: "hstack g16 wrap" }, p["east_of_mozart"].map((f) => {
+				h("div", { class: "hstack g-16 wrap" }, p["east_of_mozart"].map((f) => {
 					return h("div", { class: "thumb flex center" }, [
 						h("img", {
 							class: "present center",
@@ -74,9 +73,9 @@ const handler: Handler = async ({ res }) => {
 					])
 				})),
 			]),
-			h("div", { class: "section p32 stretch-x vstack g16" }, [
+			h("div", { class: "section p-32 fill-x vstack g16" }, [
 				h("p", {}, "Menu Design for Heal We Bar"),
-				h("div", { class: "hstack g16 wrap" }, p["heal_we_bar"].map((f) => {
+				h("div", { class: "hstack g-16 wrap" }, p["heal_we_bar"].map((f) => {
 					return h("div", { class: "thumb flex center" }, [
 						h("img", {
 							class: "present center",

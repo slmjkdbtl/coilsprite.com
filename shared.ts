@@ -5,7 +5,7 @@ const styles = {
 		"margin": "0",
 		"padding": "0",
 		"box-sizing": "border-box",
-		"cursor": "url(/static/img/wand.png) 32 32, default",
+		"cursor": "url(/static/img/wand.png) 32 32, auto",
 	},
 	"html": {
 		"width": "100%",
@@ -14,6 +14,8 @@ const styles = {
 		"width": "100%",
 		"overflow-x": "hidden",
 		"background": "url(/static/img/sky.jpg)",
+		"background-size": "400px",
+		"animation": "scroll 60s infinite linear",
 	},
 	".bling": {
 		"position": "absolute",
@@ -31,6 +33,16 @@ const styles = {
 		":hover": {
 			"background": "blue",
 		},
+	},
+	"@keyframes": {
+		"scroll": {
+			"from": {
+				"background-position": "0 0",
+			},
+			"to": {
+				"background-position": "400px 0",
+			},
+		}
 	},
 }
 

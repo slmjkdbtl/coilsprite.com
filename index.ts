@@ -1,136 +1,98 @@
-import { h, css, js, Handler } from "./www"
+import { h, css, cc, js, Handler } from "./www"
 import { head } from "./shared"
 
 const styles = {
 	"main": {
 		"width": "100%",
-		"height": "1600px",
-		"min-height": "100vh",
-		"overflow": "hidden",
 		"position": "relative",
 	},
 	"#content": {
 		"position": "relative",
 		"margin": "0 auto",
-		"width": "800px",
-		// "@media": {
-			// "screen and (max-width: 960px)": {
-				// "width": "100%",
-			// },
-		// },
+		"max-width": "800px",
+		"width": "100%",
+		"padding-bottom": "100px",
 	},
 	"#title": {
 		"position": "absolute",
 		"left": "50%",
 		"top": "40px",
 		"transform": "translateX(-50%)",
-		"width": "360px",
+		"max-width": "360px",
+		"width": "80%",
+		"@media": {
+			"screen and (max-width: 600px)": {
+				"position": "static",
+				"transform": "translateX(0)",
+				"margin-top": "40px",
+			},
+		},
+	},
+	".block": {
+		"position": "absolute",
+		"transition": "0.2s",
+		":hover": {
+			"transform": "scale(1.05)",
+			".label": {
+				"transform": "scale(1.1)",
+			},
+		},
+		".gfx": {
+			"@media": {
+				"screen and (max-width: 600px)": {
+					"width": "100%",
+				},
+			},
+		},
+		".label": {
+			"transition": "0.2s",
+			"position": "absolute",
+			"@media": {
+				"screen and (max-width: 600px)": {
+					"position": "static",
+					"max-width": "40%",
+				},
+			},
+		},
+		"@media": {
+			"screen and (max-width: 600px)": {
+				"width": "100%",
+				"position": "static",
+				...cc("vstack align-center"),
+			},
+		},
 	},
 	"#cd": {
-		"position": "absolute",
 		"left": "0px",
 		"top": "220px",
-		"transition": "0.2s",
-		":hover": {
-			"transform": "scale(1.05)",
-			".label": {
-				"transform": "scale(1.1)",
-			},
-		},
 		".label": {
-			"transition": "0.2s",
-			"position": "absolute",
-			"left": "190px",
-			"top": "190px",
+			"left": "180px",
+			"top": "200px",
 		},
-		// ".gfx": {
-			// "@media": {
-				// "screen and (max-width: 960px)": {
-					// "width": "100%",
-					// "max-width": "480px",
-				// },
-			// },
-		// },
-		// "@media": {
-			// "screen and (max-width: 960px)": {
-				// "position": "relative",
-				// "width": "100%",
-			// },
-		// },
 	},
 	"#shroooms": {
-		"position": "absolute",
 		"right": "0",
-		"top": "300px",
-		"transition": "0.2s",
-		":hover": {
-			"transform": "scale(1.05)",
-			".label": {
-				"transform": "scale(1.1)",
-			},
-		},
+		"top": "280px",
 		".label": {
-			"transition": "0.2s",
-			"position": "absolute",
 			"left": "100px",
 			"top": "320px",
 		},
-		// "@media": {
-			// "screen and (max-width: 960px)": {
-				// "position": "relative",
-				// "width": "100%",
-			// },
-		// },
 	},
 	"#shirt": {
-		"position": "absolute",
 		"left": "60px",
-		"top": "680px",
-		"transition": "0.2s",
-		"width": "320px",
-		":hover": {
-			"transform": "scale(1.05)",
-			".label": {
-				"transform": "scale(1.1)",
-			},
-		},
+		"top": "640px",
 		".label": {
-			"transition": "0.2s",
-			"position": "absolute",
 			"left": "160px",
 			"top": "180px",
 		},
-		// "@media": {
-			// "screen and (max-width: 960px)": {
-				// "position": "relative",
-				// "width": "100%",
-			// },
-		// },
 	},
 	"#phone": {
-		"position": "absolute",
 		"right": "160px",
-		"top": "880px",
-		"transition": "0.2s",
-		"width": "200px",
-		":hover": {
-			"transform": "scale(1.05)",
-			".label": {
-				"transform": "scale(1.1)",
-			},
-		},
+		"top": "800px",
 		".label": {
-			"transition": "0.2s",
-			"position": "absolute",
 			"left": "10px",
 			"top": "130px",
 		},
-		// "@media": {
-			// "screen and (max-width: 960px)": {
-				// "position": "relative",
-				// "width": "100%",
-			// },
-		// },
 	},
 	"#rest": {
 		"position": "absolute",
@@ -166,32 +128,33 @@ const handler: Handler = async ({ res }) => {
 		]),
 		h("body", {}, [
 			h("main", {}, [
-				h("div", { id: "content" }, [
+				h("div", { id: "content", class: "vstack align-center" }, [
 					h("img", { id: "title", src: "/static/img/title.png" }),
-					h("div", { class: "stretch-x vstack align-center justify-center g32" }, [
-						h("a", { id: "cd", href: "/music", }, [
+					h("div", { class: "fill-x vstack align-center justify-center g-32" }, [
+						h("a", { id: "cd", class: "block", href: "/music", }, [
 							h("img", { class: "gfx", src: "/static/img/cd.png" }),
 							h("img", { class: "label", src: "/static/img/music.png" }),
 						]),
-						h("a", { id: "shroooms", href: "/artworks", }, [
+						h("a", { id: "shroooms", class: "block", href: "/artworks", }, [
 							h("img", { class: "gfx", src: "/static/img/shroooms.png" }),
 							h("img", { class: "label", src: "/static/img/artworks.png" }),
 						]),
-						h("a", { id: "shirt", href: "/shop", }, [
+						h("a", { id: "shirt", class: "block", href: "/shop", }, [
 							h("img", { class: "gfx", src: "/static/img/shirt.png" }),
 							h("img", { class: "label", src: "/static/img/shop.png" }),
 						]),
-						h("a", { id: "phone", href: "/contact", }, [
+						h("a", { id: "phone", class: "block", href: "/contact", }, [
 							h("img", { class: "gfx", src: "/static/img/phone.png" }),
 							h("img", { class: "label", src: "/static/img/contact.png" }),
 						]),
 					]),
 				]),
-				h("img", { id: "ground", src: "/static/img/ground.png" }),
-				h("img", { id: "pandasheep", src: "/static/img/pandasheep.png" }),
-				h("img", { id: "rest", src: "/static/img/rest.png" }),
+				// h("img", { id: "ground", src: "/static/img/ground.png" }),
+				// h("img", { id: "pandasheep", src: "/static/img/pandasheep.png" }),
+				// h("img", { id: "rest", src: "/static/img/rest.png" }),
 			]),
 			// h("div", { id: "mousetest" }, []),
+			h("script", {}, await js("client/index.ts")),
 		]),
 	]))
 }
