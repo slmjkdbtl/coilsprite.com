@@ -1573,6 +1573,7 @@ export const c: Record<string, StyleSheet> = {
 	"hidden": { "display": "none" },
 	"inline": { "display": "inline" },
 	"inline-block": { "display": "inline-block" },
+	"relative": { "position": "relative" },
 	"vstack": { "display": "flex", "flex-direction": "column" },
 	"hstack": { "display": "flex", "flex-direction": "row" },
 	"vstack-reverse": { "display": "flex", "flex-direction": "column-reverse" },
@@ -1609,12 +1610,22 @@ export const c: Record<string, StyleSheet> = {
 	"wrap": { "flex-wrap": "wrap" },
 	"wrap-reverse": { "flex-wrap": "wrap-reverse" },
 	"nowrap": { "flex-wrap": "no-wrap" },
+	"center-abs": {
+		"position": "absolute",
+		"top": "50%",
+		"left": "50%",
+		"transform": "translate(-50%, -50%)",
+	},
 }
 
 for (let i = 1; i <= 8; i++) {
 	c[`grow-${i}}`] = { "flex-grow": i + "" }
 	c[`shrink-${i}}`] = { "flex-shrink": i + "" }
 	c[`flex-${i}}`] = { "flex-grow": i + "", "flex-shrink": i + "" }
+}
+
+for (let i = -8; i <= 8; i++) {
+	c[`z-${i}`] = { "z-index": `${i}` }
 }
 
 const spaces = [2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 96, 128]

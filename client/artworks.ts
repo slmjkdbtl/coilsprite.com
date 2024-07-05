@@ -2,7 +2,7 @@ import present from "./present"
 
 present({
 	className: "present",
-	cursor: "zoom-in",
+	cursor: null,
 	transition: 0.2,
 	transitionFunc: "ease",
 	size: 0.8,

@@ -172,13 +172,15 @@ export default function(userOpts = {}) {
 
 	function apply(img) {
 		img.addEventListener("click", onclick)
-		const restore = setTempCSS(img, {
-			"cursor": opts.cursor ?? "zoom-in",
-		})
-		cleanups.push(() => {
-			restore()
-			img.removeEventListener("click", onclick)
-		})
+		if (opts.cursor !== null) {
+			const restore = setTempCSS(img, {
+				"cursor": opts.cursor ?? "zoom-in",
+			})
+			cleanups.push(() => {
+				restore()
+				img.removeEventListener("click", onclick)
+			})
+		}
 	}
 
 	function present(srcImg) {

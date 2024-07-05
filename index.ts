@@ -154,7 +154,6 @@ const handler: Handler = async ({ res }) => {
 				// h("img", { id: "rest", src: "/static/img/rest.png" }),
 			]),
 			// h("div", { id: "mousetest" }, []),
-			h("script", {}, await js("client/index.ts")),
 		]),
 	]))
 }
