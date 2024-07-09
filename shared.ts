@@ -1,4 +1,4 @@
-import { h, css, csslib, js, } from "./www"
+import { h, css, cc, csslib, js, } from "./www"
 
 const styles = {
 	"*": {
@@ -9,13 +9,23 @@ const styles = {
 	},
 	"html": {
 		"width": "100%",
+		"height": "100%",
 	},
 	"body": {
 		"width": "100%",
+		"height": "100%",
 		"overflow-x": "hidden",
 		"background": "url(/static/img/sky.jpg)",
 		"background-size": "400px",
 		"animation": "scroll 60s infinite linear",
+	},
+	"figure": {
+		...cc("vstack g-16 align-center"),
+	},
+	"p": {
+		"::selection": {
+			// TODO
+		},
 	},
 	".bling": {
 		"position": "absolute",
@@ -53,6 +63,8 @@ export async function head() {
 		h("link", { rel: "icon", href: "/static/img/midorii.png" }),
 		h("style", {}, csslib()),
 		h("style", {}, css(styles)),
+		// TODO: scrolling document.title?
 		h("script", {}, await js("client/bling.ts")),
+		h("script", {}, await js("client/player.ts")),
 	]
 }

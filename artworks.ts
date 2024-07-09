@@ -17,6 +17,11 @@ const styles = {
 			"vstack",
 			"g-64",
 		]),
+		"@media": {
+			"screen and (max-width: 800px)": {
+				"overflow-x": "hidden",
+			},
+		},
 	},
 	".section": {
 		...cc([
@@ -40,7 +45,7 @@ const styles = {
 			"width": "calc(100% + 120px)",
 			"height": "calc(100% + 120px)",
 			"filter": "blur(32px)",
-			"background": "#ffffff9f",
+			"background": "#ffffffaf",
 		},
 		...cc([
 			"relative",
@@ -54,7 +59,7 @@ const styles = {
 		"img": {
 			"max-width": "100%",
 			"max-height": "100%",
-			"border-radius": "4px",
+			"transition": "0.2s",
 		},
 	},
 }
@@ -63,7 +68,6 @@ type Project = {
 	name: string,
 	path: string,
 	images: string[],
-	color: string,
 }
 
 const projects: Project[] = [
@@ -71,19 +75,16 @@ const projects: Project[] = [
 		name: "Poster design & drawings",
 		path: "posters_drawings",
 		images: [],
-		color: "#078E3B",
 	},
 	{
 		name: "CD Design for East of Mozart",
 		path: "east_of_mozart",
 		images: [],
-		color: "#E46BBE",
 	},
 	{
 		name: "Menu Design for Heal We Bar",
 		path: "heal_we_bar",
 		images: [],
-		color: "#FE9479",
 	},
 ]
 

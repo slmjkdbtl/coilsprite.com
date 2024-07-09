@@ -1610,6 +1610,7 @@ export const c: Record<string, StyleSheet> = {
 	"wrap": { "flex-wrap": "wrap" },
 	"wrap-reverse": { "flex-wrap": "wrap-reverse" },
 	"nowrap": { "flex-wrap": "no-wrap" },
+	"rounded": { "border-radius": "50%" },
 	"center-abs": {
 		"position": "absolute",
 		"top": "50%",
@@ -1621,7 +1622,7 @@ export const c: Record<string, StyleSheet> = {
 for (let i = 1; i <= 8; i++) {
 	c[`grow-${i}}`] = { "flex-grow": i + "" }
 	c[`shrink-${i}}`] = { "flex-shrink": i + "" }
-	c[`flex-${i}}`] = { "flex-grow": i + "", "flex-shrink": i + "" }
+	c[`flex-${i}}`] = { "flex": i + "" }
 }
 
 for (let i = -8; i <= 8; i++) {
