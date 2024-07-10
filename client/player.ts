@@ -1,11 +1,13 @@
+// TODO: embed image and create DOM in this script
+
 const songPath = "/static/songs"
 
 const songs = [
-	"immense blue pane",
 	"no animals in the lake",
+	"the imagination of water",
 	"our body is a power station",
 	"spring behind the mountains",
-	"the imagination of water",
+	"immense blue pane",
 	"trippy ticket",
 ]
 
@@ -20,37 +22,79 @@ function toSong(i: number) {
 	if (!paused) {
 		audio.play()
 	}
-	const label = document.querySelector<HTMLImageElement>("#player #label")
+	const label = document.querySelector<HTMLImageElement>("#player .label p")
 	if (label) {
 		label.textContent = songs[curSong] + ".mp3"
 	}
 }
 
+function preload(url: string) {
+	const img = new Image()
+	img.src = url
+}
+
+preload("/static/img/btn_pause.png")
+
 function play() {
 	audio.play()
-	const btn = document.querySelector<HTMLImageElement>("#player #btn_play")
+	const btn = document.querySelector<HTMLImageElement>("#player .btn_play")
+	const label = document.querySelector<HTMLDivElement>("#player .label")
 	if (btn) {
 		btn.src = "/static/img/btn_pause.png"
+	}
+	if (label) {
+		label.classList.add("marquee")
 	}
 }
 
 function pause() {
 	audio.pause()
-	const btn = document.querySelector<HTMLImageElement>("#player #btn_play")
+	const btn = document.querySelector<HTMLImageElement>("#player .btn_play")
+	const label = document.querySelector<HTMLDivElement>("#player .label")
 	if (btn) {
 		btn.src = "/static/img/btn_play.png"
+	}
+	if (label) {
+		label.classList.remove("marquee")
 	}
 }
 
 document.addEventListener("DOMContentLoaded", () => {
 
 	const player = document.querySelector<HTMLDivElement>("#player")
-	const playBtn = player?.querySelector<HTMLImageElement>("#btn_play")
-	const stopBtn = player?.querySelector<HTMLImageElement>("#btn_stop")
-	const prevBtn = player?.querySelector<HTMLImageElement>("#btn_prev")
-	const nextBtn = player?.querySelector<HTMLImageElement>("#btn_next")
-	const time = player?.querySelector<HTMLParagraphElement>("#time")
-	const label = player?.querySelector<HTMLParagraphElement>("#label")
+	const bg = player?.querySelector<HTMLImageElement>(".bg")
+	const playBtn = player?.querySelector<HTMLImageElement>(".btn_play")
+	const stopBtn = player?.querySelector<HTMLImageElement>(".btn_stop")
+	const prevBtn = player?.querySelector<HTMLImageElement>(".btn_prev")
+	const nextBtn = player?.querySelector<HTMLImageElement>(".btn_next")
+	const time = player?.querySelector<HTMLParagraphElement>(".time")
+	const label = player?.querySelector<HTMLParagraphElement>(".label")
+	const handle = player?.querySelector<HTMLImageElement>(".progress_handle")
+
+	bg?.addEventListener("mousedown", (e) => {
+
+		if (!player) return
+
+		e.preventDefault()
+		const rect = bg.getBoundingClientRect()
+		const offset = [rect.x - e.clientX, rect.y - e.clientY]
+
+		function onmousemove(e: MouseEvent) {
+			if (!player) return
+			e.preventDefault()
+			player.style.left = e.clientX + offset[0] + "px"
+			player.style.top = e.clientY + offset[1] + "px"
+		}
+
+		function onmouseup(e: MouseEvent) {
+			document.removeEventListener("mousemove", onmousemove)
+			document.removeEventListener("mouseup", onmouseup)
+		}
+
+		document.addEventListener("mousemove", onmousemove)
+		document.addEventListener("mouseup", onmouseup)
+
+	})
 
 	toSong(curSong)
 
@@ -74,6 +118,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	nextBtn?.addEventListener("click", () => {
 		curSong = (curSong + 1) % songs.length
 		toSong(curSong)
+	})
+
+	handle?.addEventListener("mousedown", () => {
+		// TODO
 	})
 
 	setInterval(() => {
