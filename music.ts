@@ -68,49 +68,43 @@ const styles = {
 		"filter": "blur(24px)",
 		"background": "#9250e45f",
 	},
-	".disc": {
-		"width": "160px",
-		"height": "160px",
-		"position": "relative",
-		"&.play": {
-			"img": {
-				":nth-child(1)": {
-					"animation": "disc1 infinite 0.2s linear",
-				},
-				":nth-child(2)": {
-					"animation": "disc2 infinite 0.2s",
-				},
-			},
+	"#player": {
+		"position": "fixed",
+		"bottom": "20px",
+		"left": "20px",
+		"font-family": "04b03",
+		"color": "#75004f",
+		".progress": {
+			...cc("hstack g-8 absolute"),
+			"top": "66px",
+			"left": "110px",
 		},
-		"img": {
-			"width": "100%",
+		".buttons": {
+			...cc("hstack g-8 absolute"),
+			"top": "90px",
+			"left": "110px",
+		},
+		"#label": {
 			"position": "absolute",
+			"width": "150px",
+			"font-size": "16px",
+			"text-overflow": "clip",
+			"overflow": "hidden",
+			"white-space": "nowrap",
+			"top": "40px",
+			"left": "110px",
 		},
 	},
 	"@font-face": [
+		{
+			"font-family": "04b03",
+			"src": "url(/static/fonts/04b03.ttf)"
+		},
 		{
 			"font-family": "APL2741",
 			"src": "url(/static/fonts/APL2741.ttf)"
 		},
 	],
-	"@keyframes": {
-		"disc1": {
-			"from": { "transform": "rotate(0deg)" },
-			"to": { "transform": "rotate(360deg)" },
-		},
-		"disc2": {
-			"0%": { "transform": "rotate(-2deg)" },
-			"50%": { "transform": "rotate(2deg)" },
-			"100%": { "transform": "rotate(-2deg)" },
-		},
-	},
-}
-
-function disc(songPath: string) {
-	return h("div", { class: "disc", "data-song": songPath }, [
-		h("img", { src: "/static/img/disc1.png" }),
-		h("img", { src: "/static/img/disc2.png" }),
-	])
 }
 
 const handler: Handler = async ({ res }) => {
@@ -124,7 +118,6 @@ const handler: Handler = async ({ res }) => {
 		]),
 		h("body", {}, [
 			h("main", {}, [
-				h("div", { class: "player" }, []),
 				h("img", { id: "title", src: "/static/img/title.png" }),
 				h("div", { class: "biobox" }, [
 					h("img", { class: "photo", src: "/static/img/photo.png" }),
@@ -133,13 +126,21 @@ const handler: Handler = async ({ res }) => {
 						h("p", {}, coilSprite.bio),
 					]),
 				]),
-				disc("/static/songs/the imagination of water.mp3"),
 				h("figure", {}, [
 					h("img", { class: "gigs", src: "/static/img/gigs.png" }),
 					h("figcaption", {}, "Past Performances"),
 				]),
 			]),
-			h("script", {}, await js("client/music.ts")),
+			h("div", { id: "player" }, [
+				h("img", { src: "/static/img/player_bg.png" }),
+				h("p", { id: "label" }, ""),
+				h("div", { class: "progress" }, [
+					h("p", { id: "time" }, "00:00"),
+				]),
+				h("div", { class: "buttons" }, ["stop", "prev", "play", "next"].map((b) => {
+					return h("img", { id: `btn_${b}`, src: `/static/img/btn_${b}.png` })
+				})),
+			]),
 		]),
 	]))
 }

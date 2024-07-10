@@ -1574,6 +1574,8 @@ export const c: Record<string, StyleSheet> = {
 	"inline": { "display": "inline" },
 	"inline-block": { "display": "inline-block" },
 	"relative": { "position": "relative" },
+	"absolute": { "position": "absolute" },
+	"fixed": { "position": "fixed" },
 	"vstack": { "display": "flex", "flex-direction": "column" },
 	"hstack": { "display": "flex", "flex-direction": "row" },
 	"vstack-reverse": { "display": "flex", "flex-direction": "column-reverse" },
