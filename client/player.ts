@@ -84,6 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			e.preventDefault()
 			player.style.left = e.clientX + offset[0] + "px"
 			player.style.top = e.clientY + offset[1] + "px"
+			player.style.bottom = "unset"
+			player.style.right = "unset"
 		}
 
 		function onmouseup(e: MouseEvent) {

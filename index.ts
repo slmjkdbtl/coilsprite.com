@@ -12,86 +12,96 @@ const styles = {
 		"max-width": "800px",
 		"width": "100%",
 		"padding-bottom": "100px",
+		...cc("vstack"),
 	},
 	"#title": {
-		"position": "absolute",
-		"left": "50%",
-		"top": "40px",
-		"transform": "translateX(-50%)",
+		"margin-top": "48px",
 		"max-width": "360px",
 		"width": "80%",
-		"@media": {
-			"screen and (max-width: 600px)": {
-				"position": "static",
-				"transform": "translateX(0)",
-				"margin-top": "40px",
-			},
-		},
+	},
+	".blocks": {
+		...cc("fill-x vstack align-center justify-center"),
+		"position": "relative",
 	},
 	".block": {
 		"position": "absolute",
-		"transition": "0.2s",
+		"transition": "transform 0.2s",
 		":hover": {
 			"transform": "scale(1.05)",
 			".label": {
 				"transform": "scale(1.1)",
 			},
 		},
+		"@media": {
+			"(max-width: 640px)": {
+				"width": "90%",
+				"max-width": "400px",
+				"position": "relative",
+				"left": "unset !important",
+				"right": "unset !important",
+				"top": "unset !important",
+				"bottom": "unset !important",
+			},
+		},
 		".gfx": {
+			"width": "100%",
 			"@media": {
-				"screen and (max-width: 600px)": {
+				"(max-width: 640px)": {
 					"width": "100%",
 				},
 			},
 		},
 		".label": {
-			"transition": "0.2s",
+			"transition": "transform 0.2s",
 			"position": "absolute",
-			"@media": {
-				"screen and (max-width: 600px)": {
-					"position": "static",
-					"max-width": "40%",
-				},
-			},
-		},
-		"@media": {
-			"screen and (max-width: 600px)": {
-				"width": "100%",
-				"position": "static",
-				...cc("vstack align-center"),
-			},
 		},
 	},
 	"#cd": {
-		"left": "0px",
-		"top": "220px",
+		"left": "0",
+		"top": "0",
 		".label": {
-			"left": "180px",
-			"top": "200px",
+			"left": "50%",
+			"top": "58%",
+			"width": "38%",
+		},
+		"@media": {
+			"(max-width: 640px)": {
+				"left": "-4% !important",
+				"width": "110%",
+			},
 		},
 	},
 	"#shroooms": {
 		"right": "0",
-		"top": "280px",
+		"top": "40px",
 		".label": {
-			"left": "100px",
-			"top": "320px",
+			"left": "20%",
+			"top": "60%",
+			"width": "45%",
 		},
 	},
 	"#shirt": {
-		"left": "60px",
-		"top": "640px",
+		"left": "8%",
+		"top": "400px",
 		".label": {
-			"left": "160px",
-			"top": "180px",
+			"width": "26%",
+			"left": "45%",
+			"top": "60%",
 		},
 	},
 	"#phone": {
-		"right": "160px",
-		"top": "800px",
+		"right": "20%",
+		"top": "560px",
+		"max-width": "240px",
 		".label": {
-			"left": "10px",
-			"top": "130px",
+			"width": "80%",
+			"left": "5%",
+			"top": "60%",
+		},
+		"@media": {
+			"(max-width: 640px)": {
+				"width": "70%",
+			},
 		},
 	},
 	"#rest": {
@@ -130,7 +140,7 @@ const handler: Handler = async ({ res }) => {
 			h("main", {}, [
 				h("div", { id: "content", class: "vstack align-center" }, [
 					h("img", { id: "title", src: "/static/img/title.png" }),
-					h("div", { class: "fill-x vstack align-center justify-center g-32" }, [
+					h("div", { class: "blocks" }, [
 						h("a", { id: "cd", class: "block", href: "/music", }, [
 							h("img", { class: "gfx", src: "/static/img/cd.png" }),
 							h("img", { class: "label", src: "/static/img/music.png" }),

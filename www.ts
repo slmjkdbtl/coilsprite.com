@@ -1428,6 +1428,12 @@ export function h(
 
 }
 
+export function dataurl(path: string) {
+	const file = Bun.file(path)
+	const base64 = fs.readFileSync(path, { encoding: "base64" })
+	return `data:${file.type};base64,${base64}`
+}
+
 export function style(sheet: StyleSheet) {
 	let style = ""
 	for (const prop in sheet) {
@@ -1576,6 +1582,7 @@ export const c: Record<string, StyleSheet> = {
 	"relative": { "position": "relative" },
 	"absolute": { "position": "absolute" },
 	"fixed": { "position": "fixed" },
+	"container": { "container-type": "inline-size" },
 	"vstack": { "display": "flex", "flex-direction": "column" },
 	"hstack": { "display": "flex", "flex-direction": "row" },
 	"vstack-reverse": { "display": "flex", "flex-direction": "column-reverse" },

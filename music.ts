@@ -1,10 +1,17 @@
 import * as fs from "fs/promises"
-import { h, css, cc, js, Handler } from "./www"
+import * as path from "path"
+import { h, css, cc, js, dataurl, Handler } from "./www"
 import { head } from "./shared"
+
+async function readDir(p: string) {
+	const files = await fs.readdir(p)
+	return files.sort().map((f) => path.join(p, f))
+}
 
 const coilSprite = {
 	bio: "A coil sprite, keen on capturing linear emotions, crawling forward on the road of fourth world music. Following her instincts and clumsily researching to make some fun music, integrating world music, atmosphere, sampling, electronic music, attempting to break the boundaries of traditional music and create a more novel music experience. Also trying to create some soft, peaceful moments and a garden that blooms inward.",
 	bioZH: "一只线圈精灵，热衷于捕捉线性情绪，在第四世界音乐道路中匍匐前进着。跟随本能笨拙地研究着做点好玩的音乐，融入世界音乐、氛围、采样、电子乐，尝试打破传统音乐的界限，创造一种更新奇的音乐体验。也在试图制造一些柔软的、静谧的时刻和一座向内盛开的花园",
+	gigs: await readDir("static/gigs"),
 }
 
 const blurJesus = {
@@ -27,6 +34,14 @@ const styles = {
 			"g-64",
 			"align-center",
 		]),
+		"@media": {
+			"screen and (max-width: 640px)": {
+				"max-width": "480px",
+			},
+		},
+	},
+	"p,figcaption": {
+		"font-weight": "1000",
 	},
 	"#title": {
 		"max-width": "360px",
@@ -35,7 +50,7 @@ const styles = {
 	".biobox": {
 		...cc("hstack g-48 align-center fill-x"),
 		"@media": {
-			"screen and (max-width: 600px)": {
+			"screen and (max-width: 640px)": {
 				...cc("vstack"),
 			},
 		},
@@ -43,13 +58,12 @@ const styles = {
 	".bio": {
 		"position": "relative",
 		"flex": "1",
-		"font-weight": "1000",
 	},
 	".photo": {
 		"width": "0",
 		"flex": "1",
 		"@media": {
-			"screen and (max-width: 600px)": {
+			"screen and (max-width: 640px)": {
 				"width": "90%",
 			},
 		},
@@ -57,6 +71,12 @@ const styles = {
 	".gigs": {
 		"max-width": "480px",
 		"width": "90%",
+	},
+	".gigs2": {
+		...cc("grid colw-200 g-16"),
+		"img": {
+			"width": "100%",
+		},
 	},
 	".backdrop": {
 		...cc([
@@ -71,12 +91,12 @@ const styles = {
 	},
 	"#player": {
 		"position": "fixed",
-		// TODO
-		"top": "calc(100% - 160px)",
-		"left": "32px",
+		"bottom": "20px",
+		"left": "20px",
 		"font-family": "f04b03",
 		"color": "#75004f",
-		"width": "280px",
+		"max-width": "280px",
+		"width": "calc(100% - 40px)",
 		".bg": {
 			"width": "100%",
 		},
@@ -90,7 +110,7 @@ const styles = {
 			"top": "30%",
 			"left": "39%",
 			"padding": "0 8px",
-			...cc("flex align-center"),
+			...cc("flex align-center container"),
 			"&.marquee": {
 				"p": {
 					"animation": "marquee 10s infinite linear",
@@ -122,11 +142,10 @@ const styles = {
 				"transform": "translateX(0)",
 			},
 			"70%": {
-				// TODO
-				"transform": "translateX(calc(-100% + 140px))",
+				"transform": "translateX(calc(-100% + 100cqw))",
 			},
 			"100%": {
-				"transform": "translateX(calc(-100% + 140px))",
+				"transform": "translateX(calc(-100% + 100cqw))",
 			},
 		},
 	},
@@ -134,10 +153,12 @@ const styles = {
 		{
 			"font-family": "f04b03",
 			"src": "url(/static/fonts/04b03.ttf)",
+			"font-display": "block",
 		},
 		{
 			"font-family": "APL2741",
-			"src": "url(/static/fonts/APL2741.ttf)",
+			"src": `url(/static/fonts/APL2741.ttf)`,
+			"font-display": "block",
 		},
 	],
 }
@@ -165,6 +186,9 @@ const handler: Handler = async ({ res }) => {
 					h("img", { class: "gigs", src: "/static/img/gigs.png" }),
 					h("figcaption", {}, "Past Performances"),
 				]),
+				// h("div", { class: "gigs2" }, coilSprite.gigs.map((u) => {
+					// return h("img", { src: "/" + u })
+				// })),
 			]),
 			h("div", { id: "player" }, [
 				h("img", { class: "bg", src: "/static/img/player_bg.png" }),
