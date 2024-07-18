@@ -533,7 +533,7 @@ export function dir(route = "", root = ""): Handler {
 						},
 						"body": {
 							"padding": "16px",
-							"font-size": "16px",
+							"font-size": "24px",
 							"font-family": "Monospace",
 						},
 						"li": {
@@ -1658,7 +1658,7 @@ for (const color of colors) {
 	c[`${color}`] = { "background-color": color }
 }
 
-for (let i = 2; i <= 8; i++) {
+for (let i = 1; i <= 8; i++) {
 	c[`col-${i}`] = { "grid-template-columns": `repeat(${i}, 1fr)` }
 }
 
@@ -1667,8 +1667,8 @@ const autocol = (w: number, min: number, max: number) => ({
 	"grid-template_columns": `repeat(auto-fit, minmax(min(100% / ${min}, max(${w}, 100% / ${max})), 1fr))`
 })
 
-for (let i = 1; i <= 32; i++) {
-	const px = i * 40
+for (let i = 1; i <= 64; i++) {
+	const px = i * 20
 	c[`w-${px}`] = { "width": `${px}px` }
 	c[`h-${px}`] = { "height": `${px}px` }
 	c[`colw-${px}`] = { "grid-template-columns": `repeat(auto-fill, minmax(min(100%, ${px}px), 1fr))` }
@@ -1803,7 +1803,6 @@ export function cron(rule: CronRule, action: () => void) {
 
 const alphaNumChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-// TODO: filter bad words?
 export function randAlphaNum(len: number = 8) {
 	let str = ""
 	for (let i = 0; i < len; i++) {

@@ -33,14 +33,14 @@ function preload(url: string) {
 	img.src = url
 }
 
-preload("/static/img/btn_pause.png")
+preload("/static/img/music/btn_pause.png")
 
 function play() {
 	audio.play()
 	const btn = document.querySelector<HTMLImageElement>("#player .btn_play")
 	const label = document.querySelector<HTMLDivElement>("#player .label")
 	if (btn) {
-		btn.src = "/static/img/btn_pause.png"
+		btn.src = "/static/img/music/btn_pause.png"
 	}
 	if (label) {
 		label.classList.add("marquee")
@@ -52,7 +52,7 @@ function pause() {
 	const btn = document.querySelector<HTMLImageElement>("#player .btn_play")
 	const label = document.querySelector<HTMLDivElement>("#player .label")
 	if (btn) {
-		btn.src = "/static/img/btn_play.png"
+		btn.src = "/static/img/music/btn_play.png"
 	}
 	if (label) {
 		label.classList.remove("marquee")
@@ -110,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	stopBtn?.addEventListener("click", () => {
 		audio.currentTime = 0
+		pause()
 	})
 
 	prevBtn?.addEventListener("click", () => {

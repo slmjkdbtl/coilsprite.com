@@ -7,12 +7,10 @@ const styles = {
 		"position": "relative",
 	},
 	"#content": {
-		"position": "relative",
+		...cc("vstack fill-x relative"),
 		"margin": "0 auto",
 		"max-width": "800px",
-		"width": "100%",
 		"padding-bottom": "100px",
-		...cc("vstack"),
 	},
 	"#title": {
 		"margin-top": "48px",
@@ -20,8 +18,13 @@ const styles = {
 		"width": "80%",
 	},
 	".blocks": {
-		...cc("fill-x vstack align-center justify-center"),
-		"position": "relative",
+		...cc("fill-x vstack align-center justify-center relative"),
+		"height": "780px",
+		"@media": {
+			"(max-width: 640px)": {
+				"height": "auto",
+			},
+		},
 	},
 	".block": {
 		"position": "absolute",
@@ -107,24 +110,35 @@ const styles = {
 	"#rest": {
 		"position": "absolute",
 		"width": "480px",
-		"right": "120px",
+		"right": "8%",
 		"bottom": "0",
 		"pointer-events": "none",
+		"@media": {
+			"(max-width: 840px)": {
+				"display": "none",
+			},
+		},
 	},
 	"#pandasheep": {
 		"position": "absolute",
 		"width": "240px",
-		"left": "120px",
+		"left": "12%",
 		"bottom": "20px",
 		"pointer-events": "none",
 	},
 	"#ground": {
-		"position": "absolute",
-		"min-width": "calc(100vw + 20%)",
-		"left": "50%",
-		"transform": "translate(-50%, 0)",
-		"bottom": "-10%",
-		"pointer-events": "none",
+		"margin-top": "160px",
+		"position": "relative",
+		"width": "100%",
+		"height": "200px",
+		"background": "url(/static/img/ground.png) no-repeat",
+		"background-size": "1600px",
+		"background-position": "center -40px",
+		"@media": {
+			"(min-width: 1420px)": {
+				"display": "none",
+			},
+		},
 	},
 }
 
@@ -133,7 +147,7 @@ const handler: Handler = async ({ res }) => {
 		h("head", {}, [
 			...await head(),
 			h("title", {}, "coilsprite"),
-			h("meta", { name: "description", content: "midori's homepage", }),
+			h("meta", { name: "description", content: "midorii's homepage", }),
 			h("style", {}, css(styles)),
 		]),
 		h("body", {}, [
@@ -159,9 +173,10 @@ const handler: Handler = async ({ res }) => {
 						]),
 					]),
 				]),
-				// h("img", { id: "ground", src: "/static/img/ground.png" }),
-				// h("img", { id: "pandasheep", src: "/static/img/pandasheep.png" }),
-				// h("img", { id: "rest", src: "/static/img/rest.png" }),
+				h("div", { id: "ground" }, [
+					h("img", { id: "pandasheep", src: "/static/img/pandasheep.png" }),
+					h("img", { id: "rest", src: "/static/img/rest.png" }),
+				]),
 			]),
 			// h("div", { id: "mousetest" }, []),
 		]),

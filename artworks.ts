@@ -18,7 +18,7 @@ const styles = {
 			"g-64",
 		]),
 		"@media": {
-			"screen and (max-width: 800px)": {
+			"(max-width: 800px)": {
 				"overflow-x": "hidden",
 			},
 		},
@@ -89,7 +89,7 @@ const projects: Project[] = [
 ]
 
 for (const proj of projects) {
-	const images = await fs.readdir(`static/${proj.path}`)
+	const images = await fs.readdir(`static/img/artworks/${proj.path}`)
 	proj.images = images.sort()
 }
 
@@ -98,20 +98,20 @@ const handler: Handler = async ({ res }) => {
 		h("head", {}, [
 			...await head(),
 			h("title", {}, "artworks - coilsprite"),
-			h("meta", { name: "description", content: "midori's artworks", }),
+			h("meta", { name: "description", content: "midorii's artworks", }),
 			h("style", {}, css(styles)),
 		]),
 		h("body", {}, [
 			h("main", {}, [
 				h("div", { class: "vstack g-128" }, projects.map((p) => {
 					return h("div", { class: "section" }, [
-						h("img", { class: "title", src: `/static/img/${p.path}.png` }),
+						h("img", { class: "title", src: `/static/img/artworks/${p.path}.png` }),
 						h("div", { class: "images" }, [
 							h("div", { class: "backdrop" }, []),
 							...p.images.map((f) => {
 								return h("img", {
 									class: "present",
-									src: `/static/${p.path}/${f}`,
+									src: `/static/img/artworks/${p.path}/${f}`,
 									"data-present-scope": p.path,
 								})
 							})
