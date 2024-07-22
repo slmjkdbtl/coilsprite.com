@@ -3,6 +3,13 @@ import * as path from "path"
 import { h, css, cc, js, dataurl, Handler } from "./www"
 import { head } from "./shared"
 
+// qrencode $url -s 16 -o output.png
+// magick input.png -transparent white -trim output.png
+const links = [
+	{ name: "wechat_channel", url: "https://weixin.qq.com/f/MBOLmESbZlq1pBZK8qC0jko" },
+	{ name: "redbook", url: "http://xhslink.com/3DNnmQ" },
+]
+
 const styles = {
 	"body": {
 		"font-family": "APL2741",
@@ -45,6 +52,14 @@ const handler: Handler = async ({ res }) => {
 		h("body", {}, [
 			h("main", {}, [
 				h("a", { href: "https://www.instagram.com/coilsprite/" }, "instagram"),
+				h("figure", {}, [
+					h("img", { class: "gigs", src: "/static/img/qr/redbook.png" }),
+					h("figcaption", {}, "小红书"),
+				]),
+				h("figure", {}, [
+					h("img", { class: "gigs", src: "/static/img/qr/wechat_channel.png" }),
+					h("figcaption", {}, "微信视频号"),
+				]),
 			]),
 		]),
 	]))

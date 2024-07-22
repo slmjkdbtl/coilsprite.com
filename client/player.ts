@@ -4,6 +4,7 @@ const songPath = "/static/songs"
 
 const songs = [
 	"no animals in the lake",
+	"sceneshadow",
 	"the imagination of water",
 	"our body is a power station",
 	"spring behind the mountains",

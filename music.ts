@@ -4,7 +4,7 @@ import { h, css, cc, js, dataurl, Handler } from "./www"
 import { head } from "./shared"
 
 const coilSprite = {
-	bio: "A coil sprite, keen on capturing linear emotions, crawling forward on the road of fourth world music. Following her instincts and clumsily researching to make some fun music, integrating world music, atmosphere, sampling, electronic music, attempting to break the boundaries of traditional music and create a more novel music experience. Also trying to create some soft, peaceful moments and a garden that blooms inward.",
+	bio: "A coil sprite, keen on capturing linear emotions, crawling forward on the road of fourth world music. Following her instincts and clumsily researching to make some fun music, integrating world music, experimental, atmosphere, sampling, electronic music, attempting to break the boundaries of traditional music and create a more novel music experience. Also trying to create some soft, peaceful moments and a garden that blooms inward.",
 	bioZH: "一只线圈精灵，热衷于捕捉线性情绪，在第四世界音乐道路中匍匐前进着。跟随本能笨拙地研究着做点好玩的音乐，融入世界音乐、氛围、采样、电子乐，尝试打破传统音乐的界限，创造一种更新奇的音乐体验。也在试图制造一些柔软的、静谧的时刻和一座向内盛开的花园",
 }
 
@@ -200,6 +200,10 @@ const handler: Handler = async ({ res }) => {
 				h("figure", {}, [
 					h("img", { class: "gigs", src: "/static/img/music/gigs.png" }),
 					h("figcaption", {}, "Past Performances"),
+				]),
+				h("figure", {}, [
+					h("img", { src: "/static/img/music/wechat_channel_qr.png", class: "w-160" }),
+					h("figcaption", {}, "Wechat Channel for more videos"),
 				]),
 				h("div", { class: "vstack g-32 align-center" }, [
 					h("img", { class: "photo2", src: "/static/img/music/photo2.png" }),

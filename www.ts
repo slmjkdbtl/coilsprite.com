@@ -1374,6 +1374,28 @@ export type HTMLAttr =
 	| string[]
 	| Record<string, string>
 
+const inlineElements = new Set([
+	"p",
+	"b",
+	"i",
+	"em",
+	"strong",
+	"big",
+	"small",
+	"code",
+	"sub",
+	"sup",
+	"label",
+	"span",
+	"h1",
+	"h2",
+	"h3",
+	"h4",
+	"h5",
+	"h6",
+	"title",
+])
+
 // html text builder
 export function h(
 	tag: string,
@@ -1382,7 +1404,7 @@ export function h(
 ) {
 
 	let html = `<${tag}`
-	const nl = ""
+	const nl = inlineElements.has(tag) ? "" : "\n"
 
 	for (const k in attrs) {
 		let v = attrs[k]
@@ -1696,9 +1718,10 @@ export type CSSLibOpts = {
 export function csslib(opt: CSSLibOpts = {}) {
 
 	const compileStyles = (sheet: Record<string, StyleSheet>) => {
+		const nl = " "
 		let css = ""
 		for (const sel in sheet) {
-			css += `.${sel} { ${style(sheet[sel])} } `
+			css += `.${sel} { ${style(sheet[sel])} }${nl}`
 		}
 		return css
 	}

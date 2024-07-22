@@ -13,11 +13,12 @@ const styles = {
 	"main": {
 		"margin": "0 auto",
 		"max-width": "800px",
-		"padding-bottom": "80px",
+		"padding-top": "32px",
+		"padding-bottom": "64px",
 		...cc([
 			"fill-x",
 			"vstack",
-			"g-64",
+			"g-48",
 			"align-center",
 			"text-center",
 		]),
@@ -60,7 +61,7 @@ const handler: Handler = async ({ res }) => {
 			h("main", {}, [
 				h("img", { class: "logo", src: "/static/img/shop/logo.png" }),
 				h("div", { class: "vstack g-16 align-center" }, [
-					h("img", { class: "w-60", src: "/static/img/shop/taobao_qr.png" }),
+					h("img", { class: "w-80", src: "/static/img/qr/taobao.png" }),
 					h("a", { href: "https://chilldrink.world.taobao.com/" }, "go to taobao store"),
 				]),
 				h("div", { class: "vstack g-16" }, [

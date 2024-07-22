@@ -2,10 +2,6 @@ import { h, css, cc, js, Handler } from "./www"
 import { head } from "./shared"
 
 const styles = {
-	"main": {
-		"width": "100%",
-		"position": "relative",
-	},
 	"#content": {
 		...cc("vstack fill-x relative"),
 		"margin": "0 auto",
@@ -130,10 +126,10 @@ const styles = {
 		"margin-top": "160px",
 		"position": "relative",
 		"width": "100%",
-		"height": "200px",
+		"height": "240px",
 		"background": "url(/static/img/ground.png) no-repeat",
 		"background-size": "1600px",
-		"background-position": "center -40px",
+		"background-position": "center 0px",
 		"@media": {
 			"(min-width: 1420px)": {
 				"display": "none",
@@ -151,32 +147,30 @@ const handler: Handler = async ({ res }) => {
 			h("style", {}, css(styles)),
 		]),
 		h("body", {}, [
-			h("main", {}, [
-				h("div", { id: "content", class: "vstack align-center" }, [
-					h("img", { id: "title", src: "/static/img/title.png" }),
-					h("div", { class: "blocks" }, [
-						h("a", { id: "cd", class: "block", href: "/music", }, [
-							h("img", { class: "gfx", src: "/static/img/cd.png" }),
-							h("img", { class: "label", src: "/static/img/music.png" }),
-						]),
-						h("a", { id: "shroooms", class: "block", href: "/artworks", }, [
-							h("img", { class: "gfx", src: "/static/img/shroooms.png" }),
-							h("img", { class: "label", src: "/static/img/artworks.png" }),
-						]),
-						h("a", { id: "shirt", class: "block", href: "/shop", }, [
-							h("img", { class: "gfx", src: "/static/img/shirt.png" }),
-							h("img", { class: "label", src: "/static/img/shop.png" }),
-						]),
-						h("a", { id: "phone", class: "block", href: "/contact", }, [
-							h("img", { class: "gfx", src: "/static/img/phone.png" }),
-							h("img", { class: "label", src: "/static/img/contact.png" }),
-						]),
+			h("div", { id: "content", class: "vstack align-center" }, [
+				h("img", { id: "title", src: "/static/img/title.png" }),
+				h("div", { class: "blocks" }, [
+					h("a", { id: "cd", class: "block", href: "/music", }, [
+						h("img", { class: "gfx", src: "/static/img/cd.png" }),
+						h("img", { class: "label", src: "/static/img/music.png" }),
+					]),
+					h("a", { id: "shroooms", class: "block", href: "/artworks", }, [
+						h("img", { class: "gfx", src: "/static/img/shroooms.png" }),
+						h("img", { class: "label", src: "/static/img/artworks.png" }),
+					]),
+					h("a", { id: "shirt", class: "block", href: "/shop", }, [
+						h("img", { class: "gfx", src: "/static/img/shirt.png" }),
+						h("img", { class: "label", src: "/static/img/shop.png" }),
+					]),
+					h("a", { id: "phone", class: "block", href: "/contact", }, [
+						h("img", { class: "gfx", src: "/static/img/phone.png" }),
+						h("img", { class: "label", src: "/static/img/contact.png" }),
 					]),
 				]),
-				h("div", { id: "ground" }, [
-					h("img", { id: "pandasheep", src: "/static/img/pandasheep.png" }),
-					h("img", { id: "rest", src: "/static/img/rest.png" }),
-				]),
+			]),
+			h("div", { id: "ground" }, [
+				h("img", { id: "pandasheep", src: "/static/img/pandasheep.png" }),
+				h("img", { id: "rest", src: "/static/img/rest.png" }),
 			]),
 			// h("div", { id: "mousetest" }, []),
 		]),
