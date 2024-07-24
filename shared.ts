@@ -20,7 +20,7 @@ const styles = {
 		"animation": "scroll 60s infinite linear",
 	},
 	"figure": {
-		...cc("vstack g-16 align-center"),
+		...cc("vstack g-16 align-center text-center"),
 	},
 	"p": {
 		"::selection": {

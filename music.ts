@@ -148,6 +148,10 @@ const styles = {
 			},
 		},
 	},
+	"video": {
+		"max-width": "480px",
+		"width": "100%",
+	},
 	"@keyframes": {
 		"marquee": {
 			"0%": {
@@ -202,7 +206,11 @@ const handler: Handler = async ({ res }) => {
 					h("figcaption", {}, "Past Performances"),
 				]),
 				h("figure", {}, [
-					h("img", { src: "/static/img/music/wechat_channel_qr.png", class: "w-160" }),
+					h("video", { src: "/static/video/gig.mp4", controls: true, }, []),
+					h("figcaption", {}, "Performance at ShuangDa Festival 2024"),
+				]),
+				h("figure", {}, [
+					h("img", { src: "/static/img/qr/wechat_channel.png", class: "w-120" }),
 					h("figcaption", {}, "Wechat Channel for more videos"),
 				]),
 				h("div", { class: "vstack g-32 align-center" }, [

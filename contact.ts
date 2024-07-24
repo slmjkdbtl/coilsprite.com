@@ -3,11 +3,9 @@ import * as path from "path"
 import { h, css, cc, js, dataurl, Handler } from "./www"
 import { head } from "./shared"
 
-// qrencode $url -s 16 -o output.png
-// magick input.png -transparent white -trim output.png
-const links = [
-	{ name: "wechat_channel", url: "https://weixin.qq.com/f/MBOLmESbZlq1pBZK8qC0jko" },
-	{ name: "redbook", url: "http://xhslink.com/3DNnmQ" },
+const qrs = [
+	{ name: "小红书", path: "redbook" },
+	{ name: "微信视频号", path: "wechat_channel" },
 ]
 
 const styles = {
@@ -19,7 +17,7 @@ const styles = {
 	"main": {
 		"margin": "0 auto",
 		"max-width": "800px",
-		"padding": "48px",
+		"padding": "16px",
 		"padding-bottom": "200px",
 		...cc([
 			"fill-x",
@@ -30,6 +28,9 @@ const styles = {
 	},
 	"a": {
 		"font-size": "24px",
+	},
+	".telephone": {
+		"width": "100%",
 	},
 	"@font-face": [
 		{
@@ -51,15 +52,14 @@ const handler: Handler = async ({ res }) => {
 		]),
 		h("body", {}, [
 			h("main", {}, [
+				h("img", { class: "telephone", src: "/static/img/telephone.png" }),
 				h("a", { href: "https://www.instagram.com/coilsprite/" }, "instagram"),
-				h("figure", {}, [
-					h("img", { class: "gigs", src: "/static/img/qr/redbook.png" }),
-					h("figcaption", {}, "小红书"),
-				]),
-				h("figure", {}, [
-					h("img", { class: "gigs", src: "/static/img/qr/wechat_channel.png" }),
-					h("figcaption", {}, "微信视频号"),
-				]),
+				// h("div", { class: "vstack g-16" }, qrs.map((qr) => {
+					// return h("figure", {}, [
+						// h("img", { class: "w-120 fill-x", src: `/static/img/qr/${qr.path}.png` }),
+						// h("figcaption", {}, qr.name),
+					// ])
+				// })),
 			]),
 		]),
 	]))

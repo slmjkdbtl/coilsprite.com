@@ -1,3 +1,5 @@
+// TODO: option to use another src when presented
+
 const DEF_OPTS = {
 	className: "present",
 	cursor: "zoom-in",
