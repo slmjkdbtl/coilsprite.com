@@ -1,4 +1,5 @@
-import { h, css, cc, csslib, js, } from "./www"
+import { h, css, cc, csslib, classes, js, Handler } from "./www"
+import scripts from "./scripts"
 
 const styles = {
 	"*": {
@@ -56,15 +57,26 @@ const styles = {
 	},
 }
 
-export async function head() {
-	return [
-		h("meta", { charset: "utf-8", }),
-		h("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
-		h("link", { rel: "icon", href: "/static/img/midorii.png" }),
-		h("style", {}, csslib()),
-		h("style", {}, css(styles)),
-		// TODO: scrolling document.title?
-		h("script", {}, await js("client/bling.ts")),
-		h("script", {}, await js("client/player.ts")),
-	]
+export type Opts = {
+	title? : string,
+	desc? : string,
+}
+
+export default function page(body: string[], opts: Opts = {}): Handler {
+	return ({ res, req }) => {
+		return res.sendHTML("<!DOCTYPE html>" + h("html", { lang: "en" }, [
+			h("head", {}, [
+				h("title", {}, opts.title ?? "coilsprite"),
+				h("meta", { name: "description", content: opts.desc ?? "midorii's homepage", }),
+				h("meta", { charset: "utf-8", }),
+				h("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
+				h("link", { rel: "icon", href: "/static/img/midorii.png" }),
+				h("style", {}, csslib()),
+				h("style", {}, css(styles)),
+				h("script", {}, scripts.bling),
+				h("script", {}, scripts.player),
+			]),
+			h("body", {}, body),
+		]))
+	}
 }

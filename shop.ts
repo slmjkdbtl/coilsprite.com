@@ -1,7 +1,7 @@
 import * as fs from "fs/promises"
 import * as path from "path"
-import { h, css, cc, js, dataurl, Handler } from "./www"
-import { head } from "./shared"
+import { h, css, cc } from "./www"
+import page from "./page"
 
 const styles = {
 	"body": {
@@ -48,37 +48,29 @@ function range(a: number, b: number) {
 	return Array.from({ length: b - a + 1 }, (val, i) => a + i)
 }
 
-const handler: Handler = async ({ res }) => {
-	return res.sendHTML("<!DOCTYPE html>" + h("html", { lang: "en" }, [
-		h("head", {}, [
-			...await head(),
-			h("title", {}, "shop - coilsprite"),
-			h("meta", { name: "description", content: "midorii's shop", }),
-			// @ts-ignore
-			h("style", {}, css(styles)),
+export default page([
+	// @ts-ignore
+	h("style", {}, css(styles)),
+	h("main", {}, [
+		h("img", { class: "logo", src: "/static/img/shop/logo.png" }),
+		h("div", { class: "vstack g-16 align-center" }, [
+			h("img", { class: "w-80", src: "/static/img/qr/taobao.png" }),
+			h("a", { href: "https://chilldrink.world.taobao.com/" }, "go to taobao store"),
 		]),
-		h("body", {}, [
-			h("main", {}, [
-				h("img", { class: "logo", src: "/static/img/shop/logo.png" }),
-				h("div", { class: "vstack g-16 align-center" }, [
-					h("img", { class: "w-80", src: "/static/img/qr/taobao.png" }),
-					h("a", { href: "https://chilldrink.world.taobao.com/" }, "go to taobao store"),
-				]),
-				h("div", { class: "vstack g-16" }, [
-					h("div", { class: "shelf" }, range(1, 9).map((i) => {
-						return h("img", { class: "fill-x", src: `/static/img/shop/${i}.jpg` })
-					})),
-					h("img", { class: "fill-x", src: `/static/img/shop/10.jpg` }),
-					h("div", { class: "shelf" }, range(11, 13).map((i) => {
-						return h("img", { class: "fill-x", src: `/static/img/shop/${i}.jpg` })
-					})),
-					...range(14, 16).map((i) => {
-						return h("img", { class: "fill-x", src: `/static/img/shop/${i}.jpg` })
-					})
-				]),
-			]),
+		h("div", { class: "vstack g-16" }, [
+			h("div", { class: "shelf" }, range(1, 9).map((i) => {
+				return h("img", { class: "fill-x", src: `/static/img/shop/${i}.jpg` })
+			})),
+			h("img", { class: "fill-x", src: `/static/img/shop/10.jpg` }),
+			h("div", { class: "shelf" }, range(11, 13).map((i) => {
+				return h("img", { class: "fill-x", src: `/static/img/shop/${i}.jpg` })
+			})),
+			...range(14, 16).map((i) => {
+				return h("img", { class: "fill-x", src: `/static/img/shop/${i}.jpg` })
+			})
 		]),
-	]))
-}
-
-export default handler
+	]),
+], {
+	title: "shop - coilsprite",
+	desc: "midorii's shop",
+})

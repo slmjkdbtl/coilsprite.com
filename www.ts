@@ -4,8 +4,8 @@ if (typeof Bun === "undefined") {
 	throw new Error("Requires Bun")
 }
 
-import * as fs from "fs"
-import * as path from "path"
+import * as fs from "node:fs"
+import * as path from "node:path"
 import type {
 	ServeOptions,
 	WebSocketServeOptions,
@@ -362,10 +362,8 @@ export function createServer(opts: ServerOpts = {}): Server {
 						const res = h(ctx)
 						if (isPromise(res)) {
 							res.catch((e) => {
-								if (errHandler) {
-									errHandler(ctx, e)
-									onErrorEvents.forEach((f) => f(e))
-								}
+								errHandler(ctx, e)
+								onErrorEvents.forEach((f) => f(e))
 							})
 						}
 					} catch (e) {
@@ -392,11 +390,11 @@ export function createServer(opts: ServerOpts = {}): Server {
 	let errHandler: ErrorHandler = ({ req, res, next }, err) => {
 		console.error(err)
 		res.status = 500
-		res.sendText(`internal server error`)
+		res.sendText("500 internal server error")
 	}
 	let notFoundHandler: NotFoundHandler = ({ res }) => {
 		res.status = 404
-		res.sendText("not found")
+		res.sendText("404 not found")
 	}
 
 	return {
@@ -484,6 +482,9 @@ export const route = overload2((pat: string, handler: Handler): Handler => {
 	}
 })
 
+const trimSlashes = (str: string) => str.replace(/\/*$/, "").replace(/^\/*/, "")
+const parentPath = (p: string, sep = "/") => p.split(sep).slice(0, -1).join(sep)
+
 export function files(route = "", root = ""): Handler {
 	return ({ req, res, next }) => {
 		route = trimSlashes(route)
@@ -496,74 +497,272 @@ export function files(route = "", root = ""): Handler {
 	}
 }
 
-export function dir(route = "", root = ""): Handler {
-	return ({ req, res, next }) => {
-		route = trimSlashes(route)
-		const pathname = trimSlashes(decodeURI(req.url.pathname))
-		if (!pathname.startsWith(route)) return next()
-		const baseDir = "./" + trimSlashes(root)
-		const relativeURLPath = pathname.replace(new RegExp(`^${route}/?`), "")
-		const p = path.join(baseDir, relativeURLPath)
-		if (isFileSync(p)) {
-			return res.sendFile(p)
-		} else if (isDirSync(p)) {
-			const entries = fs.readdirSync(p)
-				.filter((entry) => !entry.startsWith("."))
-				.sort((a, b) => a > b ? -1 : 1)
-				.sort((a, b) => path.extname(a) > path.extname(b) ? 1 : -1)
-			const files = []
-			const dirs = []
-			for (const entry of entries) {
-				const pp = path.join(p, entry)
-				if (isDirSync(pp)) {
-					dirs.push(entry)
-				} else if (isFileSync(pp)) {
-					files.push(entry)
-				}
+export function filebrowser(route = "", root = ""): Handler {
+	route = trimSlashes(route)
+	root = trimSlashes(root)
+	return async ({ req, res, next }) => {
+		const urlPath = trimSlashes(decodeURIComponent(req.url.pathname))
+		if (!urlPath.startsWith(route)) return next()
+		const relativeURLPath = urlPath.replace(new RegExp(`^${route}/?`), "")
+		const isRoot = relativeURLPath === ""
+		const diskPath = path.join("./" + root, relativeURLPath)
+		if (isFileSync(diskPath)) return res.sendFile(diskPath)
+		if (!isDirSync(diskPath)) return next()
+		const entries = fs.readdirSync(diskPath)
+			.filter((entry) => !entry.startsWith("."))
+			.sort((a, b) => a > b ? -1 : 1)
+			.sort((a, b) => path.extname(a) > path.extname(b) ? 1 : -1)
+		const files = []
+		const dirs = []
+		for (const entry of entries) {
+			const p = path.join(diskPath, entry)
+			if (isDirSync(p)) {
+				dirs.push(entry)
+			} else if (isFileSync(p)) {
+				files.push(entry)
 			}
-			const isRoot = relativeURLPath === ""
-			return res.sendHTML("<!DOCTYPE html>" + h("html", { lang: "en" }, [
-				h("head", {}, [
-					h("title", {}, decodeURI(req.url.pathname)),
-					h("style", {}, css({
-						"*": {
-							"margin": "0",
-							"padding": "0",
-							"box-sizing": "border-box",
-						},
-						"body": {
-							"padding": "16px",
-							"font-size": "24px",
-							"font-family": "Monospace",
-						},
-						"li": {
-							"list-style": "none",
-						},
-						"a": {
-							"color": "blue",
-							"text-decoration": "none",
-							":hover": {
-								"background": "blue",
-								"color": "white",
+		}
+		return res.sendHTML("<!DOCTYPE html>" + h("html", { lang: "en" }, [
+			h("head", {}, [
+				h("title", {}, urlPath + "/"),
+				h("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
+				h("style", {}, css({
+					"*": {
+						"margin": "0",
+						"padding": "0",
+						"box-sizing": "border-box",
+					},
+					"html": {
+						"width": "100%",
+						"height": "100%",
+					},
+					"body": {
+						"width": "100%",
+						"height": "100%",
+						"padding": "8px",
+						"font-size": "16px",
+						"font-family": "Monospace",
+						"display": "grid",
+						"grid-template-columns": "1fr 3fr",
+						"gap": "8px",
+						"@media": {
+							"(max-width: 640px)": {
+								"grid-template-columns": "1fr",
+								"grid-template-rows": "1fr 2fr",
 							},
 						},
-					})),
-				]),
-				h("body", {}, [
-					h("ul", {}, [
-						...(isRoot ? [] : [
-							h("a", { href: `/${parentPath(pathname)}`, }, ".."),
-						]),
-						...dirs.map((dir) => h("li", {}, [
-							h("a", { href: `/${pathname}/${dir}`, }, dir + "/"),
-						])),
-						...files.map((file) => h("li", {}, [
-							h("a", { href: `/${pathname}/${file}`, }, file),
-						])),
+					},
+					"#tree": {
+						"border-right": "dotted 2px #ccc",
+						"outline": "none",
+						"@media": {
+							"(max-width: 640px)": {
+								"border-bottom": "dotted 2px #ccc"
+							},
+						},
+					},
+					".box": {
+						"padding": "8px",
+						"overflow": "scroll",
+						"height": "100%",
+					},
+					"li": {
+						"list-style": "none",
+					},
+					"a": {
+						"color": "blue",
+						"text-decoration": "none",
+						"cursor": "pointer",
+						":hover": {
+							"background": "blue",
+							"color": "white",
+						},
+						"&.selected": {
+							"background": "blue",
+							"color": "white",
+						},
+					},
+					"p": {
+						"white-space": "pre-wrap",
+						"overflow": "scroll",
+						"height": "100%",
+					},
+					"img": {
+						"max-width": "calc(100% - 4px)",
+						"max-height": "calc(100% - 4px)",
+					},
+					"video": {
+						"max-width": "calc(100% - 4px)",
+						"max-height": "calc(100% - 4px)",
+					},
+					"iframe": {
+						"border": "none",
+						"outline": "none",
+						"width": "calc(100% - 4px)",
+						"height": "calc(100% - 4px)",
+					},
+					"embed": {
+						"border": "none",
+						"outline": "none",
+						"width": "calc(100% - 4px)",
+						"height": "calc(100% - 4px)",
+					},
+				})),
+			]),
+			h("body", {}, [
+				h("ul", { id: "tree", class: "box", tabindex: 0 }, [
+					...(isRoot ? [] : [
+						h("a", { href: `/${parentPath(diskPath)}`, }, ".."),
 					]),
+					...dirs.map((d) => h("li", {}, [
+						h("a", { href: `/${diskPath}/${d}`, }, d + "/"),
+					])),
+					...files.map((file) => h("li", {}, [
+						h("a", { href: `#${file}`, class: "entry" }, file),
+					])),
 				]),
-			]))
-		}
+				h("div", { id: "content", class: "box" }, []),
+				h("script", {}, `
+const entries = document.querySelectorAll(".entry")
+const content = document.querySelector("#content")
+const tree = document.querySelector("#tree")
+let curIdx = null
+
+tree.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+    e.preventDefault()
+    if (curIdx === null) {
+      toIdx(0)
+    } else {
+      if (e.key === "ArrowUp") {
+        if (curIdx > 0) {
+          location.hash = "#" + entries[curIdx - 1].textContent
+        }
+      } else if (e.key === "ArrowDown") {
+        if (curIdx < entries.length - 1) {
+          location.hash = "#" + entries[curIdx + 1].textContent
+        }
+      }
+    }
+  }
+})
+
+function isInView(el) {
+  const rect = el.getBoundingClientRect()
+  return (
+    rect.bottom > 0 &&
+    rect.right > 0 &&
+    rect.top < window.innerHeight &&
+    rect.left < window.innerWidth
+  )
+}
+
+function reset() {
+  for (const entry of entries) {
+    entry.classList.remove("selected")
+  }
+  content.innerHTML = ""
+  document.title = "${urlPath}" + "/"
+  curIdx = null
+}
+
+async function toIdx(i) {
+
+  const entry = entries[i]
+  if (!entry) return
+
+  reset()
+  curIdx = i
+  entry.classList.add("selected")
+
+  if (!isInView(entry)) {
+    entry.scrollIntoView()
+  }
+
+  const file = entry.textContent
+
+  document.title = "${urlPath}" + "/" + file
+
+  const anim = setInterval(() => {
+    let c = content.textContent.length
+    c = (c + 1) % 4
+    content.textContent = ".".repeat(c)
+  }, 100)
+
+  const url = "/" + "${diskPath}" + "/" + encodeURIComponent(file)
+  const res = await fetch(url)
+
+  clearInterval(anim)
+  content.innerHTML = ""
+
+  if (!res.ok) {
+    content.textContent = "file not found"
+    return
+  }
+
+  const ty = res.headers.get("Content-Type")
+
+  if (ty.startsWith("text/html")) {
+    const iframe = document.createElement("iframe")
+    iframe.src = url
+    content.append(iframe)
+  } else if (ty.startsWith("text/")) {
+    const p = document.createElement("p")
+    p.textContent = await res.text()
+    content.append(p)
+  } else if (ty.startsWith("image/")) {
+    const img = document.createElement("img")
+    img.src = url
+    content.append(img)
+  } else if (ty.startsWith("video/")) {
+    const video = document.createElement("video")
+    video.src = url
+    video.controls = true
+    content.append(video)
+  } else if (ty.includes("pdf")) {
+    const embed = document.createElement("embed")
+    embed.src = url
+    content.append(embed)
+  } else {
+    content.textContent = "file type not supported"
+  }
+
+}
+
+function findIdx(file) {
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i]
+    if (entry.textContent === file) {
+      return i
+    }
+  }
+  return -1
+}
+
+function getHash() {
+  return decodeURIComponent(location.hash.substring(1))
+}
+
+function updateHash() {
+  const hash = getHash()
+  const idx = findIdx(hash)
+  if (idx !== -1) {
+    toIdx(idx)
+  } else {
+    reset()
+  }
+}
+
+window.addEventListener("hashchange", () => {
+  updateHash()
+})
+
+if (location.hash) {
+  updateHash()
+}
+				`),
+			]),
+		]))
 	}
 }
 
@@ -737,9 +936,6 @@ export function logger(opts: LoggerOpts = {}): Handler {
 		return next()
 	}
 }
-
-const trimSlashes = (str: string) => str.replace(/\/*$/, "").replace(/^\/*/, "")
-const parentPath = (p: string, sep = "/") => p.split(sep).slice(0, -1).join(sep)
 
 export function matchPath(pat: string, url: string): Record<string, string> | null {
 
@@ -1364,6 +1560,22 @@ export function getBearerAuth(req: Req): string | void {
 	return cred
 }
 
+export function classes(list: Array<string | Record<string, boolean>>) {
+	const c = []
+	for (const l of list) {
+		if (typeof l === "string") {
+			c.push(l)
+		} else if (typeof l === "object") {
+			for (const k in l) {
+				if (l[k]) {
+					c.push(k)
+				}
+			}
+		}
+	}
+	return c
+}
+
 export type HTMLChild = string | number | undefined | null
 export type HTMLChildren = HTMLChild | HTMLChild[]
 
@@ -1371,30 +1583,8 @@ export type HTMLAttr =
 	| boolean
 	| string
 	| number
-	| string[]
+	| Array<string | undefined>
 	| Record<string, string>
-
-const inlineElements = new Set([
-	"p",
-	"b",
-	"i",
-	"em",
-	"strong",
-	"big",
-	"small",
-	"code",
-	"sub",
-	"sup",
-	"label",
-	"span",
-	"h1",
-	"h2",
-	"h3",
-	"h4",
-	"h5",
-	"h6",
-	"title",
-])
 
 // html text builder
 export function h(
@@ -1404,7 +1594,7 @@ export function h(
 ) {
 
 	let html = `<${tag}`
-	const nl = inlineElements.has(tag) ? "" : "\n"
+	const nl = Array.isArray(children) ? "\n" : ""
 
 	for (const k in attrs) {
 		let v = attrs[k]
@@ -1421,7 +1611,7 @@ export function h(
 				html += ` ${k}=${v}`
 				break
 			case "object":
-				const value = Array.isArray(v) ? v.join(" ") : style(v)
+				const value = Array.isArray(v) ? v.filter((p) => p).join(" ") : style(v)
 				html += ` ${k}="${Bun.escapeHTML(value)}"`
 				break
 		}
@@ -1429,21 +1619,21 @@ export function h(
 
 	html += ">" + nl
 
-	if (typeof(children) === "string" || typeof(children) === "number") {
-		html += children
-	} else if (Array.isArray(children)) {
+	if (Array.isArray(children)) {
 		for (const child of children) {
 			if (!child) continue
 			if (Array.isArray(child)) {
-				html += h("div", {}, child)
+				html += h("div", {}, child) + "\n"
 			} else {
-				html += child
+				html += child + "\n"
 			}
 		}
+	} else if (children) {
+		html += children
 	}
 
 	if (children !== undefined && children !== null) {
-		html += `</${tag}>` + nl
+		html += `</${tag}>`
 	}
 
 	return html
@@ -1609,6 +1799,7 @@ export const c: Record<string, StyleSheet> = {
 	"hstack": { "display": "flex", "flex-direction": "row" },
 	"vstack-reverse": { "display": "flex", "flex-direction": "column-reverse" },
 	"hstack-reverse": { "display": "flex", "flex-direction": "row-reverse" },
+	"fill": { "width": "100%", "height": "100%" },
 	"fill-x": { "width": "100%" },
 	"fill-y": { "height": "100%" },
 	"bold": { "font-weight": "bold" },
@@ -1642,6 +1833,15 @@ export const c: Record<string, StyleSheet> = {
 	"wrap-reverse": { "flex-wrap": "wrap-reverse" },
 	"nowrap": { "flex-wrap": "no-wrap" },
 	"rounded": { "border-radius": "50%" },
+	"fit-cover": { "object-fit": "cover" },
+	"fit-contain": { "object-fit": "contain" },
+	"fit-fill": { "object-fit": "fill" },
+	"overflow-hidden": { "overflow": "hidden" },
+	"overflow-scroll": { "overflow": "scroll" },
+	"transparent": { "opacity": "0" },
+	"opaque": { "opacity": "1" },
+	"no-pointer": { "pointer-events": "none" },
+	"cursor-pointer": { "cursor": "pointer" },
 	"center-abs": {
 		"position": "absolute",
 		"top": "50%",
@@ -1650,14 +1850,24 @@ export const c: Record<string, StyleSheet> = {
 	},
 }
 
+for (let i = 0; i <= 10; i++) {
+	c[`o-${i}`] = { "opacity": i / 10 }
+}
+
 for (let i = 1; i <= 8; i++) {
-	c[`grow-${i}}`] = { "flex-grow": i + "" }
-	c[`shrink-${i}}`] = { "flex-shrink": i + "" }
-	c[`flex-${i}}`] = { "flex": i + "" }
+	c[`grow-${i}`] = { "flex-grow": i + "" }
+	c[`shrink-${i}`] = { "flex-shrink": i + "" }
+	c[`flex-${i}`] = { "flex": i + "" }
 }
 
 for (let i = -8; i <= 8; i++) {
 	c[`z-${i}`] = { "z-index": `${i}` }
+}
+
+for (let i = 1; i <= 8; i++) {
+	c[`c-${i}`] = { "color": `var(--c-${i})` }
+	c[`bg-${i}`] = { "background": `var(--bg-${i})` }
+	c[`fs-${i}`] = { "font-size": `var(--fs-${i})` }
 }
 
 const spaces = [2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 96, 128]
@@ -1674,7 +1884,7 @@ for (const s of spaces) {
 	c[`r-${s}`] = { "border-radius": `${s}px` }
 }
 
-const colors = [ "red", "green", "blue" ]
+const colors = [ "red", "green", "blue", "black", "white" ]
 
 for (const color of colors) {
 	c[`${color}`] = { "background-color": color }
@@ -1721,7 +1931,7 @@ export function csslib(opt: CSSLibOpts = {}) {
 		const nl = " "
 		let css = ""
 		for (const sel in sheet) {
-			css += `.${sel} { ${style(sheet[sel])} }${nl}`
+			css += `.${sel} { ${style(sheet[sel])} }${nl}\n`
 		}
 		return css
 	}
@@ -1739,30 +1949,20 @@ export function csslib(opt: CSSLibOpts = {}) {
 
 }
 
-const jsCache: Record<string, string> = {}
-
 // TODO: better error handling?
 export async function js(p: string) {
-	if (jsCache[p]) {
-		return Promise.resolve(jsCache[p])
-	}
 	const file = Bun.file(p)
 	if (file.size === 0) return ""
 	const res = await Bun.build({
 		entrypoints: [p],
-		minify: false,
-		sourcemap: "none",
+		sourcemap: isDev ? "inline" : "none",
 		target: "browser",
 	})
 	if (res.success) {
 		if (res.outputs.length !== 1) {
 			throw new Error(`Expected 1 output, found ${res.outputs.length}`)
 		}
-		const code = await res.outputs[0].text()
-		if (!isDev) {
-			jsCache[p] = code
-		}
-		return code
+		return await res.outputs[0].text()
 	} else {
 		console.log(res.logs[0])
 		throw new Error("Failed to build js")

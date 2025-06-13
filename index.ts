@@ -1,5 +1,5 @@
-import { h, css, cc, js, Handler } from "./www"
-import { head } from "./shared"
+import { h, css, cc } from "./www"
+import page from "./page"
 
 const styles = {
 	"#content": {
@@ -138,43 +138,35 @@ const styles = {
 	},
 }
 
-const handler: Handler = async ({ res }) => {
-	return res.sendHTML("<!DOCTYPE html>" + h("html", { lang: "en" }, [
-		h("head", {}, [
-			...await head(),
-			h("title", {}, "coilsprite"),
-			h("meta", { name: "description", content: "midorii's homepage", }),
-			h("style", {}, css(styles)),
-		]),
-		h("body", {}, [
-			h("div", { id: "content", class: "vstack align-center" }, [
-				h("img", { id: "title", src: "/static/img/title.png" }),
-				h("div", { class: "blocks" }, [
-					h("a", { id: "cd", class: "block", href: "/music", }, [
-						h("img", { class: "gfx", src: "/static/img/cd.png" }),
-						h("img", { class: "label", src: "/static/img/music.png" }),
-					]),
-					h("a", { id: "shroooms", class: "block", href: "/artworks", }, [
-						h("img", { class: "gfx", src: "/static/img/shroooms.png" }),
-						h("img", { class: "label", src: "/static/img/artworks.png" }),
-					]),
-					h("a", { id: "shirt", class: "block", href: "/shop", }, [
-						h("img", { class: "gfx", src: "/static/img/shirt.png" }),
-						h("img", { class: "label", src: "/static/img/shop.png" }),
-					]),
-					h("a", { id: "phone", class: "block", href: "/contact", }, [
-						h("img", { class: "gfx", src: "/static/img/phone.png" }),
-						h("img", { class: "label", src: "/static/img/contact.png" }),
-					]),
-				]),
+export default page([
+	h("style", {}, css(styles)),
+	h("div", { id: "content", class: "vstack align-center" }, [
+		h("img", { id: "title", src: "/static/img/title.png" }),
+		h("div", { class: "blocks" }, [
+			h("a", { id: "cd", class: "block", href: "/music", }, [
+				h("img", { class: "gfx", src: "/static/img/cd.png" }),
+				h("img", { class: "label", src: "/static/img/music.png" }),
 			]),
-			h("div", { id: "ground" }, [
-				h("img", { id: "pandasheep", src: "/static/img/pandasheep.png" }),
-				h("img", { id: "rest", src: "/static/img/rest.png" }),
+			h("a", { id: "shroooms", class: "block", href: "/artworks", }, [
+				h("img", { class: "gfx", src: "/static/img/shroooms.png" }),
+				h("img", { class: "label", src: "/static/img/artworks.png" }),
 			]),
-			// h("div", { id: "mousetest" }, []),
+			h("a", { id: "shirt", class: "block", href: "/shop", }, [
+				h("img", { class: "gfx", src: "/static/img/shirt.png" }),
+				h("img", { class: "label", src: "/static/img/shop.png" }),
+			]),
+			h("a", { id: "phone", class: "block", href: "/contact", }, [
+				h("img", { class: "gfx", src: "/static/img/phone.png" }),
+				h("img", { class: "label", src: "/static/img/contact.png" }),
+			]),
 		]),
-	]))
-}
-
-export default handler
+	]),
+	h("div", { id: "ground" }, [
+		h("img", { id: "pandasheep", src: "/static/img/pandasheep.png" }),
+		h("img", { id: "rest", src: "/static/img/rest.png" }),
+	]),
+	// h("div", { id: "mousetest" }, []),
+], {
+	title: "coilsprite",
+	desc: "midorii's homepage",
+})

@@ -1,7 +1,7 @@
 import * as fs from "fs/promises"
 import * as path from "path"
-import { h, css, cc, js, dataurl, Handler } from "./www"
-import { head } from "./shared"
+import { h, css, cc } from "./www"
+import page from "./page"
 
 const qrs = [
 	{ name: "小红书", path: "redbook" },
@@ -41,28 +41,14 @@ const styles = {
 	],
 }
 
-const handler: Handler = async ({ res }) => {
-	return res.sendHTML("<!DOCTYPE html>" + h("html", { lang: "en" }, [
-		h("head", {}, [
-			...await head(),
-			h("title", {}, "contact - coilsprite"),
-			h("meta", { name: "description", content: "midorii's contact", }),
-			// @ts-ignore
-			h("style", {}, css(styles)),
-		]),
-		h("body", {}, [
-			h("main", {}, [
-				h("img", { class: "telephone", src: "/static/img/telephone.png" }),
-				h("a", { href: "https://www.instagram.com/coilsprite/" }, "instagram"),
-				// h("div", { class: "vstack g-16" }, qrs.map((qr) => {
-					// return h("figure", {}, [
-						// h("img", { class: "w-120 fill-x", src: `/static/img/qr/${qr.path}.png` }),
-						// h("figcaption", {}, qr.name),
-					// ])
-				// })),
-			]),
-		]),
-	]))
-}
-
-export default handler
+export default page([
+	// @ts-ignore
+	h("style", {}, css(styles)),
+	h("main", {}, [
+		h("img", { class: "telephone", src: "/static/img/telephone.png" }),
+		h("a", { href: "https://www.instagram.com/coilsprite/" }, "instagram"),
+	]),
+], {
+	title: "contact - coilsprite",
+	desc: "midorii's contacts",
+})

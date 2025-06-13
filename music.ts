@@ -1,7 +1,7 @@
 import * as fs from "fs/promises"
 import * as path from "path"
-import { h, css, cc, js, dataurl, Handler } from "./www"
-import { head } from "./shared"
+import { h, css, cc } from "./www"
+import page from "./page"
 
 const coilSprite = {
 	bio: "A coil sprite, keen on capturing linear emotions, crawling forward on the road of fourth world music. Following her instincts and clumsily researching to make some fun music, integrating world music, experimental, atmosphere, sampling, electronic music, attempting to break the boundaries of traditional music and create a more novel music experience. Also trying to create some soft, peaceful moments and a garden that blooms inward.",
@@ -182,63 +182,55 @@ const styles = {
 	],
 }
 
-const handler: Handler = async ({ res }) => {
-	return res.sendHTML("<!DOCTYPE html>" + h("html", { lang: "en" }, [
-		h("head", {}, [
-			...await head(),
-			h("title", {}, "music - coilsprite"),
-			h("meta", { name: "description", content: "midorii's music", }),
-			// @ts-ignore
-			h("style", {}, css(styles)),
-		]),
-		h("body", {}, [
-			h("main", {}, [
-				h("img", { id: "title", src: "/static/img/title.png" }),
-				h("div", { class: "biobox" }, [
-					h("img", { class: "photo", src: "/static/img/music/photo.png" }),
-					h("div", { class: "bio" }, [
-						h("div", { class: "backdrop" }, []),
-						h("p", {}, coilSprite.bio),
-					]),
-				]),
-				h("figure", {}, [
-					h("img", { class: "gigs", src: "/static/img/music/gigs.png" }),
-					h("figcaption", {}, "Past Performances"),
-				]),
-				h("figure", {}, [
-					h("video", { src: "/static/video/gig.mp4", controls: true, }, []),
-					h("figcaption", {}, "Performance at ShuangDa Festival 2024"),
-				]),
-				h("figure", {}, [
-					h("img", { src: "/static/img/qr/wechat_channel.png", class: "w-120" }),
-					h("figcaption", {}, "Wechat Channel for more videos"),
-				]),
-				h("div", { class: "vstack g-32 align-center" }, [
-					h("img", { class: "photo2", src: "/static/img/music/photo2.png" }),
-					h("a", { href: "https://open.spotify.com/artist/22rOgTC7Iad90v7EP6Fn77?si=g6ug47RXTWK8oivSpVKV4A" }, [
-						h("img", { class: "w-120", src: "/static/img/music/spotify.png" }),
-					]),
-					h("div", { class: "bio2" }, [
-						h("div", { class: "backdrop" }, []),
-						h("p", {}, blurJesus.bio + " " + h("a", { href: "/static/blurjesus.pdf" }, "View bio pdf")),
-					]),
-				]),
-			]),
-			h("div", { id: "player" }, [
-				h("img", { class: "bg", src: "/static/img/music/player_bg.png" }),
-				h("div", { class: "label" }, [
-					h("p", {}, ""),
-				]),
-				h("div", { class: "progress" }, [
-					h("p", { class: "time" }, "00:00"),
-					h("img", { class: "progress_handle", src: "/static/img/music/progress_handle.png" }),
-				]),
-				h("div", { class: "buttons" }, ["stop", "prev", "play", "next"].map((b) => {
-					return h("img", { class: `btn_${b}`, src: `/static/img/music/btn_${b}.png` })
-				})),
+export default page([
+	// @ts-ignore
+	h("style", {}, css(styles)),
+	h("main", {}, [
+		h("img", { id: "title", src: "/static/img/title.png" }),
+		h("div", { class: "biobox" }, [
+			h("img", { class: "photo", src: "/static/img/music/photo.png" }),
+			h("div", { class: "bio" }, [
+				h("div", { class: "backdrop" }, []),
+				h("p", {}, coilSprite.bio),
 			]),
 		]),
-	]))
-}
-
-export default handler
+		h("figure", {}, [
+			h("img", { class: "gigs", src: "/static/img/music/gigs.png" }),
+			h("figcaption", {}, "Past Performances"),
+		]),
+		h("figure", {}, [
+			h("video", { src: "/static/video/gig.mp4", controls: true, }, []),
+			h("figcaption", {}, "Performance at ShuangDa Festival 2024"),
+		]),
+		h("figure", {}, [
+			h("img", { src: "/static/img/qr/wechat_channel.png", class: "w-120" }),
+			h("figcaption", {}, "Wechat Channel for more videos"),
+		]),
+		h("div", { class: "vstack g-32 align-center" }, [
+			h("img", { class: "photo2", src: "/static/img/music/photo2.png" }),
+			h("a", { href: "https://open.spotify.com/artist/22rOgTC7Iad90v7EP6Fn77?si=g6ug47RXTWK8oivSpVKV4A" }, [
+				h("img", { class: "w-120", src: "/static/img/music/spotify.png" }),
+			]),
+			h("div", { class: "bio2" }, [
+				h("div", { class: "backdrop" }, []),
+				h("p", {}, blurJesus.bio + " " + h("a", { href: "/static/blurjesus.pdf" }, "View bio pdf")),
+			]),
+		]),
+	]),
+	h("div", { id: "player" }, [
+		h("img", { class: "bg", src: "/static/img/music/player_bg.png" }),
+		h("div", { class: "label" }, [
+			h("p", {}, ""),
+		]),
+		h("div", { class: "progress" }, [
+			h("p", { class: "time" }, "00:00"),
+			h("img", { class: "progress_handle", src: "/static/img/music/progress_handle.png" }),
+		]),
+		h("div", { class: "buttons" }, ["stop", "prev", "play", "next"].map((b) => {
+			return h("img", { class: `btn_${b}`, src: `/static/img/music/btn_${b}.png` })
+		})),
+	]),
+], {
+	title: "music - coilsprite",
+	desc: "midorii's music",
+})

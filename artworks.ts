@@ -1,6 +1,7 @@
 import * as fs from "fs/promises"
-import { h, css, cc, js, Handler } from "./www"
-import { head } from "./shared"
+import { h, css, cc } from "./www"
+import page from "./page"
+import scripts from "./scripts"
 
 const styles = {
 	"body": {
@@ -93,35 +94,27 @@ for (const proj of projects) {
 	proj.images = images.sort()
 }
 
-const handler: Handler = async ({ res }) => {
-	return res.sendHTML("<!DOCTYPE html>" + h("html", { lang: "en" }, [
-		h("head", {}, [
-			...await head(),
-			h("title", {}, "artworks - coilsprite"),
-			h("meta", { name: "description", content: "midorii's artworks", }),
-			h("style", {}, css(styles)),
-		]),
-		h("body", {}, [
-			h("main", {}, [
-				h("div", { class: "vstack g-128" }, projects.map((p) => {
-					return h("div", { class: "section" }, [
-						h("img", { class: "title", src: `/static/img/artworks/${p.path}.png` }),
-						h("div", { class: "images" }, [
-							h("div", { class: "backdrop" }, []),
-							...p.images.map((f) => {
-								return h("img", {
-									class: "present",
-									src: `/static/img/artworks/${p.path}/${f}`,
-									"data-present-scope": p.path,
-								})
-							})
-						]),
-					])
-				})),
-			]),
-			h("script", {}, await js("client/artworks.ts")),
-		]),
-	]))
-}
-
-export default handler
+export default page([
+	h("style", {}, css(styles)),
+	h("main", {}, [
+		h("div", { class: "vstack g-128" }, projects.map((p) => {
+			return h("div", { class: "section" }, [
+				h("img", { class: "title", src: `/static/img/artworks/${p.path}.png` }),
+				h("div", { class: "images" }, [
+					h("div", { class: "backdrop" }, []),
+					...p.images.map((f) => {
+						return h("img", {
+							class: "present",
+							src: `/static/img/artworks/${p.path}/${f}`,
+							"data-present-scope": p.path,
+						})
+					})
+				]),
+			])
+		})),
+	]),
+	h("script", {}, scripts.artworks),
+], {
+	title: "artworks - coilsprite",
+	desc: "midorii's artworks",
+})

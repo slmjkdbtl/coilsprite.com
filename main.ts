@@ -19,13 +19,3 @@ server.use(route("GET", "/music", music))
 server.use(route("GET", "/artworks", artworks))
 server.use(route("GET", "/contact", contact))
 server.use(route("GET", "/shop", shop))
-
-server.error(({ req, res }, err) => {
-	console.error(`Time: ${new Date()}`)
-	console.error(`Request: ${req.method} ${req.url}`)
-	console.error("")
-	console.error(err)
-	res.sendText("server error", { status: 500 })
-})
-
-server.notFound(({ res }) => res.sendText("404", { status: 404 }))
